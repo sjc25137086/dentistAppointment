@@ -1,16 +1,21 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import Message from '../views/message/Message.vue'
-import Undetail from '../views/message/Undetail.vue'
-import Oldyuyue from '../views/old/Oldyuyue.vue'
-import Yuyue from '../views/Yuyue/Yuyue.vue'
 //导入页面组件
-import Header from '../components/MintUI/Header.vue';
-
+import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
 Vue.use(VueRouter)
 
-const routes = [{
+const routes = [
+  {
+    path: '/login',
+    component: Login
+  },
+  {
+    path: '/register',
+    component: Register
+  },
+  {
     path: '/',
     name: 'Home',
     component: Home,
@@ -43,6 +48,11 @@ const routes = [{
           path: 'doctor',
           component: () =>
               import ('../views/doctor/doctor.vue')
+      },
+      {
+        path:'personalCenter',
+        name: 'personalCenter',
+        component: ()=>import('../views/PersonalCenter/PersonalCenter.vue')
       }
     ]
     
