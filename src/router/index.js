@@ -56,8 +56,12 @@ const routes = [
         component: ()=>import('../views/PersonalCenter/PersonalCenter.vue')
       },
       {
-        path:'/homepage',
-        component:Homepage
+        path:'information',
+        component: ()=>import('../views/information/information.vue')
+      },
+      {
+        path:'homepage',
+        component:()=>import('../views/homepage/homepage.vue')
       }
     ]
     
