@@ -4,12 +4,15 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 import qs from 'qs'
-import moment from 'moment';
+//import moment from 'moment';
 import Mint from 'mint-ui';
 import 'mint-ui/lib/style.css'; 
+import { MessageBox } from 'mint-ui'
+import {Popup}  from 'mint-ui';
+
 
 Vue.use(Mint);
-Vue.prototype.moment = moment;
+//Vue.prototype.moment = moment;
 Vue.prototype.axios = axios;
 Vue.config.productionTip = false
 
