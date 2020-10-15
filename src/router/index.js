@@ -1,6 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Message from '../views/message/Message.vue'
+import Undetail from '../views/message/Undetail.vue'
+import Oldyuyue from '../views/old/Oldyuyue.vue'
+import Yuyue from '../views/Yuyue/Yuyue.vue'
+//导入页面组件
+import Header from '../components/MintUI/Header.vue';
 
 Vue.use(VueRouter)
 
@@ -14,8 +20,28 @@ const routes = [
       path:'helloworld',
       name: 'helloworld',
       component: ()=>import('../components/HelloWorld.vue')
-      }
+      },{
+        path:'message',
+        name: 'message',
+        component: ()=>import('../views/message/Message.vue')
+      },
+      {
+        path:'undetail',
+        name: 'Undetail',
+        component: ()=>import('../views/message/Undetail.vue')
+      },
+      {
+        path:'oldyuyue',
+        name: 'Oldyuyue',
+        component: ()=>import('../views/old/Oldyuyue.vue')
+      },
+      {
+        path:'yuyue',
+        name: 'Yuyue',
+        component: ()=>import('../views/Yuyue/Yuyue.vue')
+      },
     ]
+    
   }
 ]
 
