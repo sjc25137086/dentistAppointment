@@ -1,0 +1,49 @@
+<template>
+  <div>
+     <!-- 顶部开始 -->
+    <mt-header title="我的个人中心">
+      <router-link to="/" slot="left">
+      <mt-button icon="back"></mt-button>
+      </router-link>
+    </mt-header>
+    <!-- 顶部结束 -->
+    <router-link to="/login">
+    <div id="parent">
+       <div class="avatar"><img src="../../assets/avatar.jpg" alt=""></div>
+       <div class="text">
+         <p>用户名</p>
+         <p>15988888888</p>
+       </div>
+    </div>
+    </router-link>
+    <mt-cell title="历史预约" to="/" is-link></mt-cell>
+    <mt-cell title="我的预约" to="/" is-link></mt-cell>
+  </div>
+</template>
+<style scoped>
+#parent{
+  background-image: url("../../assets/timg.jpg");
+  height: 200px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+.avatar>img{
+  width: 100px;
+  height: 100px;
+}
+.avatar{
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin:20px;
+  float: left;
+}
+.text{
+  height: 100px;
+  line-height:25px;
+  margin-top: 20px;
+  float: right;
+  margin-right: 20px;
+}
+</style>
