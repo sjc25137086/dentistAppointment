@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-
+import Homepage from '../views/homepage.vue'
+import Button from '../components/button.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -16,6 +17,14 @@ const routes = [
       component: ()=>import('../components/HelloWorld.vue')
       }
     ]
+  },
+  {
+    path:'/homepage',
+    component:Homepage
+  },
+  {
+    path:'/button',
+    component:Button
   }
 ]
 
