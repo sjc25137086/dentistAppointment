@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 //导入页面组件
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
+import Homepage from '../views/homepage.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -53,6 +54,10 @@ const routes = [
         path:'personalCenter',
         name: 'personalCenter',
         component: ()=>import('../views/PersonalCenter/PersonalCenter.vue')
+      },
+      {
+        path:'/homepage',
+        component:Homepage
       }
     ]
     
