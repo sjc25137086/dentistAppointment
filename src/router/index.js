@@ -10,8 +10,7 @@ import Header from '../components/MintUI/Header.vue';
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
+const routes = [{
     path: '/',
     name: 'Home',
     component: Home,
@@ -40,23 +39,28 @@ const routes = [
         name: 'Yuyue',
         component: ()=>import('../views/Yuyue/Yuyue.vue')
       },
+      {
+          path: 'doctor',
+          component: () =>
+              import ('../views/doctor/doctor.vue')
+      }
     ]
     
   }
 ]
 
 const router = new VueRouter({
-  routes
+    routes
 })
 
 //防止同路径跳转报错
 const VueRouterPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(to) {
-  return VueRouterPush.call(this, to).catch(err => err)
+    return VueRouterPush.call(this, to).catch(err => err)
 }
 const VueRouterReplace = VueRouter.prototype.replace
 VueRouter.prototype.replace = function replace(to) {
-  return VueRouterReplace.call(this, to).catch(err => err)
+    return VueRouterReplace.call(this, to).catch(err => err)
 }
 
 export default router
