@@ -12,24 +12,20 @@
      <span id="ab">Daisy</span>
          </div>
        
-          <p>预约详情</p>
-
-           <div class="bb">
-       
-       <ul>
-        <li>预约人:管丽</li>
-        <li>预约时间：2020-10-20</li>
-        <li>治疗门诊：深圳中医院龙华分院</li>
-      </ul>
-           </div>
-      <div class="bb">
-      <ul>
-        <li>预约人:管丽</li>
-        <li>预约时间：2020-10-29</li>
-        <li>治疗门诊：深圳中医院龙华分院</li>
-      </ul>
-        </div>
-    <button id="btn">取消预约</button>
+          <p id="abc">预约详情</p>
+  
+  
+        <mt-cell title="预约人">
+         <span>管丽</span>
+         </mt-cell> 
+          <mt-cell title="预约时间">
+           <span>2020-10-20</span>
+         </mt-cell> 
+     <mt-cell title="预约门诊">
+         <span>深圳中医院龙华分院</span>
+         </mt-cell> 
+     <mt-button type="primary" @click="btn" id="btn">取消预约</mt-button>
+  
 </div>
    
 </template>
@@ -43,22 +39,38 @@
   .bb{
     background-color:whitesmoke;
   }
- ul{
-   list-style: none;
-   color:grey;
- 
+ #abc{
+  margin-bottom:40px ;
+  margin-top: 20px;
+  margin-left:5% ;
  }
  #ab{
    margin-left:80%;
 
  }
- #btn{
-   margin-left:30%;
-   background-color:#26a2ff;;
-   width:100px;
-   height: 40px;
-   margin-top:40px ;
-   
- }
-
+ 
 </style>
+<script>
+ import { MessageBox } from 'mint-ui';
+
+export default {
+    data(){
+        return{
+
+        };
+    },
+    methods:{
+       btn(){
+        MessageBox({
+          title: '',
+          message: '确认取消？',
+          showCancelButton: true
+        })
+
+
+ 
+
+       } 
+    }
+}
+</script>
