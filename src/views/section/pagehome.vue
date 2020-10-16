@@ -32,7 +32,7 @@
             <div class="article-wrapper">
               <div class="article-image">
                 <img
-                  src="../assets/images/a0bba2ce-8e21-11ea-89ba-482ae31b2081.jpg"
+                  src=""
                   alt=""
                 />
               </div>
@@ -61,7 +61,7 @@
             <div class="article-wrapper">
               <div class="article-image">
                 <img
-                  src="../assets/images/a0bba2ce-8e21-11ea-89ba-482ae31b2081.jpg"
+                  src=""
                   alt=""
                 />
               </div>
@@ -80,18 +80,20 @@
     <div>
       <mt-tabbar fixed>
         <mt-tab-item id="index">
-          <!-- <img src="../assets/images/wjx.png" slot="icon" v-if="tabbar == 'index'"> -->
-          <img src="../assets/images/wjx.png" slot="icon" />
+          <img src="" slot="icon" />
         </mt-tab-item>
         <p class="tabbar_info">______________</p>
         <mt-tab-item id="me">
-          <!-- <img src="../assets/images/wjx.png" slot="icon" v-if="tabbar == 'me'"> -->
-          <img src="../assets/images/wjx.png" slot="icon" />
+          <img src="" slot="icon" />
         </mt-tab-item>
       </mt-tabbar>
     </div>
     <!-- --------------------------------------------------------------------------------------------- -->
-    <mt-picker :slots="slots" @change="onValuesChange" class="Picker_to"></mt-picker>
+    <mt-picker
+      :slots="slots"
+      @change="onValuesChange"
+      class="Picker_to"
+    ></mt-picker>
   </div>
 </template>
 
@@ -103,7 +105,6 @@ export default {
         picker.setSlotValue(1, values[0]);
       }
     },
-    
   },
   data() {
     return {
@@ -216,7 +217,7 @@ export default {
 .tabbar_info {
   border-bottom: 5px solid #161823;
 }
-.Picker_to{
+.Picker_to {
   margin-left: 45px;
   /* display: none; */
 }

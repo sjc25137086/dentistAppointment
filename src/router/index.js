@@ -4,7 +4,6 @@ import Home from '../views/Home.vue'
 //导入页面组件
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
-import Homepage from '../views/homepage.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -61,7 +60,16 @@ const routes = [
       },
       {
         path:'homepage',
+        name:'homepage',
         component:()=>import('../views/homepage/homepage.vue')
+      },
+      {
+        path:'pagehome',
+        component:()=>import('../views/section/pagehome.vue')
+      },
+      {
+        path:'/clction',
+        component:()=>import('../views/section/clction.vue')
       }
     ]
     

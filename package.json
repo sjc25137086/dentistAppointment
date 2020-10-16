@@ -9,6 +9,7 @@
   "dependencies": {
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
+    "element-ui": "^2.13.2",
     "mint-ui": "^2.2.13",
     "moment": "^2.29.1",
     "qs": "^6.9.4",
