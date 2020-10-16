@@ -8,14 +8,19 @@
             </mt-header>
       </header> 
       <div>
-        <mt-cell title="正在预约">
-         <span>详细信息</span>
-         </mt-cell> 
-          <mt-cell title="正在预约">
-         <span>详细信息</span>
+       
+        <mt-cell title="预约人">
+        <mt-field type="text" label="" placeholder="请输入您的姓名" :attr="{maxlength:10}" v-model="name"></mt-field>
          </mt-cell>
+          <mt-cell title="预约电话">
+        <mt-field type="text" label="" placeholder="请输入您的电话" :attr="{maxlength:10}" v-model="tell"></mt-field>
+         </mt-cell>
+           <mt-cell title="预约时间">
+        <mt-field type="date" label="" placeholder="Input birthday"></mt-field>
+         </mt-cell>
+         
          </div>
-       <mt-button @click="downLoad" id="btn">取消预约</mt-button>
+        <mt-button type="primary" @click="btn" id="btn">预约</mt-button>
       </div> 
       
 </template>
@@ -23,22 +28,28 @@
   #btn{
       background-color:#26a2ff;
       margin-left:40%;
-   
+      margin-top:100px
+      
   }
   </style>
 <script>
+ import { MessageBox } from 'mint-ui';
+
 export default {
     data(){
+       
         return{
-
+         tell:"",
+         name:"",
         };
     },
     methods:{
-       downLoad(){
-           
- MessageBox.alert('Success!').then(action => {
-  
-});
+      btn(){
+        MessageBox({
+          title: '',
+          message: '确认预约？',
+          showCancelButton: true
+        })
 
 
  
