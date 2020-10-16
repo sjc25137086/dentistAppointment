@@ -5,18 +5,17 @@
       <router-link to="/" slot="left">
         <mt-button icon="back">口腔外科</mt-button>
       </router-link>
-      <mt-button icon="more" slot="right"></mt-button>
     </mt-header>
     <!-- 中间内容 -->
     <div class="doctor_m">
       <div class="doctor_m-s">
         <span>日期{{time}}</span>
-        <a href="javasprice" class="doctor_m-a">按时期预约</a>
-        <a href="javasprice" class="doctor_m-a">按医生预约</a>
+        <a href="javascript:;" class="doctor_m_a">按时期预约</a>
+        <a href="javascript:;" class="doctor_m_aa">按医生预约</a>
       </div>
       <!-- 底部分页 -->
-      <mt-navbar v-model="active">
-        <mt-tab-item id="tab-container1">
+      <mt-navbar v-model="active" class="mint-navbar">
+        <mt-tab-item id="tab-container1" class="mint-tab-item">
           <p>{{week}}</p>
           <p>{{day}}</p>
           <p>无</p>
@@ -41,28 +40,34 @@
           <p>{{day}}</p>
           <p>无</p>
         </mt-tab-item>
+        <mt-tab-item id="tab-container6">
+          <p>{{week}}</p>
+          <p>{{day}}</p>
+          <p>无</p>
+        </mt-tab-item>
         
       </mt-navbar>
       <mt-tab-container v-model="active">
         <mt-tab-container-item id="tab-container1" >
-          <div class="article" v-for="(article,index) of stt" :key = "index">
+          <div class="doctor_article" v-for="(article,index) of stt" :key = "index">
           <!-- 医生图片 -->
-          <div class="article-image" >
+          <div class="article_image" >
             <img :src='article.img'>
           </div>
-          <div class="article-wrapper">
-            <div class="article-wrapper-name">
+          <!-- 旁边的div -->
+          <div class="doctor_div">
+            <div class="doctor_name">
               <span>{{article.name}}</span>
-              <span class="article-wrapper-name-p">
-              余号:{{article.yh}}
-              <mt-badge size="small">20￥</mt-badge>
-              </span>
+              <div class="doctor_yh">
+                <span>余号:{{article.yh}}</span>
+                <mt-badge size="small" color="#FCA254">¥：20</mt-badge>
+              </div>
             </div>
-            <div  class="article-wrapper-zy">
-              {{article.zhiye}}
+            <div>
+              <p>{{article.zhiye}}</p>
             </div>
-            <div class="article-wrapper-js">
-              {{article.jianjie}}
+            <div>
+              <p>{{article.jianjie}}</p>
             </div>
           </div>
           </div>
@@ -73,57 +78,92 @@
 </template>
 
 <style>
+.mint-header {
+  background: #3DCDB4;
+  width: 100%;
+  height: 60px;
+}
+.mint-navbar {
+  width: 100%;
+}
 .doctor_m {
-  margin: 10px 5px;
+  width: 100%;
+  position: absolute;
+  margin: 10px auto;
   font-size: 18px;
+  color: #999;
 }
 .doctor_m-s {
   margin-bottom: 20px;
-}
-.doctor_m-a {
-  height: 20px;
-  float: right;
-  text-decoration: none;
-  color: #000;
-  font-size: 15px;
-  margin-top: 2px;
+  margin-top: 20px;
+  margin-left: 5px;
 }
 
-  /* 文章容器 */
-.article{
-	padding-bottom:10px;
-	border-bottom:1px solid #999;
-	margin:10px;
+.doctor_m_a,
+.doctor_m_aa {
+  text-decoration: none;
+  padding: 5px;
+  border: 1px solid #3DCDB4;
+  position: relative;
+  left: 20px;
+}
+.doctor_m_a {
+  background-color: #3DCDB4;
+  color: #fff;
+}
+
+.doctor_m_aa {
+  color: #3DCDB4;
+}
+
+.mint-navbar .mint-tab-item {
+  padding: 5px;
+  margin: 10px auto;
+}
+.mint-navbar .mint-tab-item p {
+  font-size: 18px;
+  margin: 5px;
+  color: #999;
+}
+
+/* 分页容器 */
+.doctor_article {
   display: flex;
+  margin: 8px 5px;
 }
 
 /* 医生图容器 */
-.article-image{
+.article_image{
   margin-right: 15px;
 }
-.article-image img{
+.article_image img{
   width:112px;
   border-radius: 5px;
 }
-.article-wrapper{
-	margin-top: 10px;
-  
+.doctor_div,
+.doctor_name {
+  width: 100%;
+  margin: 5px auto;
 }
-.article-wrapper-name{
-	font-size: 20px;
+.doctor_div div+div {
+  margin: 15px auto;
+}
+.doctor_name {
+  height: 20;
+  color: #000;
+  font-size: 20px;
   font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
 }
-.article-wrapper-name-p {
-  margin-left: 125px;
-	font-size: 15px;
 
+.doctor_yh {
+  font-size: 18px;
+  margin-right: 10px;
+  position: relative;
+  left: 120px;
 }
-.article-wrapper-zy{
-	margin-top: 15px;
-}
-.article-wrapper-js{
-	margin-top: 15px;
-}
+
 </style>
 
 <script>
@@ -142,7 +182,7 @@ export default {
         zhiye:'主治医生',
         jianjie:'asdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkas',
         yh:'6',
-        img:require('../../assets/avatar/00c1d55af1178ca801206abad941b6.jpg')
+        img:require('../../assets/avatar/d2b0d8ac6b02437b8b207a398f94b1d.jpg')
         },
         {
         name:"jj",
@@ -150,15 +190,28 @@ export default {
         jianjie:'asdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkas',
         yh:'6',
 
-         img:require('../../assets/avatar/00c1d55af1178ca801206abad941b6.jpg')
+         img:require('../../assets/avatar/d2b0d8ac6b02437b8b207a398f94b1d.jpg')
         },
         {
         name:"jj",
         zhiye:'主治医生',
         jianjie:'asdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkas',
         yh:'6',
-
-         img:require('../../assets/avatar/00c1d55af1178ca801206abad941b6.jpg')
+        img:require('../../assets/avatar/d2b0d8ac6b02437b8b207a398f94b1d.jpg')
+        },
+         {
+        name:"jj",
+        zhiye:'主治医生',
+        jianjie:'asdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkas',
+        yh:'6',
+        img:require('../../assets/avatar/d2b0d8ac6b02437b8b207a398f94b1d.jpg')
+        },
+         {
+        name:"jj",
+        zhiye:'主治医生',
+        jianjie:'asdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkas',
+        yh:'6',
+        img:require('../../assets/avatar/d2b0d8ac6b02437b8b207a398f94b1d.jpg')
         },
         ]
       

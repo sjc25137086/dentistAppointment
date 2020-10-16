@@ -6,9 +6,8 @@ import axios from 'axios'
 import qs from 'qs'
 import moment from 'moment';
 import Mint from 'mint-ui';
-import 'mint-ui/lib/style.css'; 
 import '../public/css/reset.css'
-import 'mint-ui/lib/style.min.css'; 
+import 'mint-ui/lib/style.min.css';
 import { Popup } from 'mint-ui';
 
 Vue.component(Popup.name, Popup)
