@@ -41,7 +41,7 @@
 }
 .text{
   height: 100px;
-  line-height:25px;
+  line-height: 50px;
   margin-top: 20px;
   float: right;
   margin-right: 20px;
