@@ -12,7 +12,7 @@
     <!-- 注册表单开始 -->
     <div class="field">
       <!-- 用户名输入框 -->
-      <mt-field type="text" label="用户名" placeholder="请输入用户名" :attr="{maxlength:15}" v-model="username" @blur.native.capture="getName" :state="nameStatus"></mt-field>
+      <mt-field type="text" label="手机号" placeholder="请输入手机号" :attr="{maxlength:15}" v-model="username" @blur.native.capture="getName" :state="nameStatus"></mt-field>
       <!-- 密码输入框 -->
       <mt-field type="password" label="密码" placeholder="请输入密码" :attr="{maxlength:20,autocomplete:'off'}" v-model="password" @blur.native.capture="getPassword" :state="nameStatus2"></mt-field>
       <!-- 确认密码输入框  -->
