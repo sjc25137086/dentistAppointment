@@ -11,15 +11,15 @@
     <!-- 顶部结束 -->
     <!-- 注册表单开始 -->
     <div class="field">
-      <!-- 用户名输入框 -->
-      <mt-field type="text" label="手机号" placeholder="请输入手机号" :attr="{maxlength:15}" v-model="username" @blur.native.capture="getName" :state="nameStatus"></mt-field>
+      <!-- 手机号输入框 -->
+      <mt-field type="text" label="手机号" placeholder="请输入手机号" :attr="{maxlength:11}" v-model="phone" @blur.native.capture="getPhone" :state="nameStatus"></mt-field>
       <!-- 密码输入框 -->
       <mt-field type="password" label="密码" placeholder="请输入密码" :attr="{maxlength:20,autocomplete:'off'}" v-model="password" @blur.native.capture="getPassword" :state="nameStatus2"></mt-field>
       <!-- 确认密码输入框  -->
       <mt-field type="password" label="确认密码" placeholder="请再次输入密码" :attr="{maxlength:20,autocomplete:'off'}" v-model="conpassword" @blur.native.capture="getConPassword" :state="nameStatus3"></mt-field>
       <!-- 验证码输入 -->
       <mt-field type="text" label="验证码" placeholder="请输入验证码">
-         <button>发送验证码</button>
+         <button :disabled="enabled" @click="getCode" v-html="text"></button>
       </mt-field>
       <!-- 注册按钮 -->
       <mt-button class="btn" @click="handle" plain>注册</mt-button>
@@ -45,7 +45,9 @@
 export default {
   data(){
     return{
-      username:"",
+      enabled:false,
+      text:"获取验证码",
+      phone:"",
       password:"",
       conpassword:"",
       nameStatus:"",
@@ -54,17 +56,31 @@ export default {
     }
   },
   methods:{
-    getName(){
+    getCode(){
+      let count=60;
+   let timer=setInterval(()=>{
+       if(count==0){
+        this.enabled=false;
+        this.text="获取验证码";
+        clearInterval(timer);
+       }else{
+        this.enabled=true;
+        this.text=`重新发送(${count})`;
+        count--;
+      }
+      },1000);  
+    },
+    getPhone(){
       //校验用户名
-      let usernameRegExp=/^\w{6,15}$/;
-      if(usernameRegExp.test(this.username)){
+      let phoneRegExp=/^1[3-9]\d{9}$/;
+      if(phoneRegExp.test(this.phone)){
          this.nameStatus="success";
          return true;
       }else{
         //简洁的短消息提示框
         this.nameStatus="error";
         this.$toast({
-          message:"请输入合法的用户名",
+          message:"请输入合法的手机号",
           position:"middle",
           duration:"2000"
           });
@@ -78,7 +94,6 @@ export default {
         return true;
      }else{
         this.nameStatus2="error";
-        //console.log("用户名非法");
         //简洁的短消息提示框
         this.$toast({
           message:"密码为必填项",
@@ -103,13 +118,13 @@ export default {
       }
    },
     handle(){
-      if(this.getName() && this.getPassword() && this.getConPassword()){
+      if(this.getPhone() && this.getPassword() && this.getConPassword()){
         //将获取到的信息提交到web服务器
-        this.axios.post("/register",`username=${this.username}&password=${this.password}`).then(res=>{
-          if(res.data.code==1){
-            this.$router.push("/");
-          }else{
-            this.$messagebox("注册提示","用户名已被占用");
+        this.axios.post("/user/register",`phone=${this.phone}&password=${this.password}`).then(res=>{
+          if(res.data.code==200){
+              this.$router.push("/");  
+          }else if(res.data.code==601){
+            this.$messagebox("注册提示","手机号已被占用");
           }
         });
       }

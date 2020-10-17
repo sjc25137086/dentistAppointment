@@ -5,9 +5,8 @@
         <router-link to="/" slot="left">
           <mt-button icon="back"></mt-button>
         </router-link>
-        <router-link to="/login" slot="right" class="shortcut"
-          >登录</router-link
-        >
+        <router-link to="/login" slot="right" class="shortcut" >登录</router-link>
+        
       </mt-header>
     </div>
     <div class="mt_search">

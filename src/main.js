@@ -15,8 +15,11 @@ Vue.use(Elementui)
 Vue.component(Popup.name, Popup)
 Vue.use(Mint);
 Vue.prototype.moment = moment;
+Vue.prototype.qs = qs;
+
 
 Vue.prototype.axios = axios;
+axios.defaults.baseURL='http://127.0.0.1:3000'
 Vue.config.productionTip = false
 
 new Vue({
