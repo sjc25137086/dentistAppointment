@@ -56,7 +56,7 @@ export default {
         return{
             fname:'',//姓名
             isCard:'',//身份证号码
-            phone:''//电话号码
+            phone:'',//电话号码
         }
     },
     methods:{
