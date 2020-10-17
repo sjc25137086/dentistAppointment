@@ -19,6 +19,8 @@ Vue.prototype.moment = moment;
 Vue.prototype.axios = axios;
 Vue.config.productionTip = false
 
+axios.defaults.baseURL = 'http://127.0.0.1:3000'
+
 new Vue({
     router,
     store,

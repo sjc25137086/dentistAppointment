@@ -13,40 +13,38 @@
         <a href="javascript:;" class="doctor_m_a">按时期预约</a>
         <a href="javascript:;" class="doctor_m_aa">按医生预约</a>
       </div>
-      <!-- 底部分页 -->
+      <!-- 分页开始 -->
       <mt-navbar v-model="active" class="mint-navbar">
         <mt-tab-item id="tab-container1" class="mint-tab-item">
-          <p>{{week}}</p>
+          <p>{{weekArr[week]}}</p>
           <p>{{day}}</p>
-          <p>无</p>
         </mt-tab-item>
-        <mt-tab-item id="tab-container2">
-          <p>{{week}}</p>
-          <p>{{day}}</p>
-          <p>无</p>
+        <mt-tab-item id="tab-container2" class="mint-tab-item">
+          <p>{{weekArr[week + 1]}}</p>
+          <p>{{day + 1}}</p>
         </mt-tab-item>
-        <mt-tab-item id="tab-container3">
-          <p>{{week}}</p>
-          <p>{{day}}</p>
-          <p>无</p>
+        <mt-tab-item id="tab-container3" class="mint-tab-item">
+          <p>{{weekArr[week + 2]}}</p>
+          <p>{{day + 2}}</p>
         </mt-tab-item>
-        <mt-tab-item id="tab-container4">
-          <p>{{week}}</p>
-          <p>{{day}}</p>
-          <p>无</p>
+        <mt-tab-item id="tab-container4" class="mint-tab-item">
+          <p>{{weekArr[week + 3]}}</p>
+          <p>{{day + 3}}</p>
         </mt-tab-item>
-        <mt-tab-item id="tab-container5">
-          <p>{{week}}</p>
-          <p>{{day}}</p>
-          <p>无</p>
+        <mt-tab-item id="tab-container5" class="mint-tab-item">
+          <p>{{weekArr[week + 4]}}</p>
+          <p>{{day + 4}}</p>
         </mt-tab-item>
-        <mt-tab-item id="tab-container6">
-          <p>{{week}}</p>
-          <p>{{day}}</p>
-          <p>无</p>
+        <mt-tab-item id="tab-container6" class="mint-tab-item">
+          <p>{{weekArr[week + 5]}}</p>
+          <p>{{day + 5}}</p>
         </mt-tab-item>
-        
+        <mt-tab-item id="tab-container7" class="mint-tab-item">
+          <p>{{weekArr[week + 6]}}</p>
+          <p>{{day + 6}}</p>
+        </mt-tab-item>
       </mt-navbar>
+      <!-- 分页内容 -->
       <mt-tab-container v-model="active">
         <mt-tab-container-item id="tab-container1" >
           <div class="doctor_article" v-for="(article,index) of stt" :key = "index">
@@ -59,15 +57,14 @@
             <div class="doctor_name">
               <span>{{article.name}}</span>
               <div class="doctor_yh">
-                <span>余号:{{article.yh}}</span>
-                <mt-badge size="small" color="#FCA254">¥：20</mt-badge>
+                <mt-badge size="small" color="#26A2FF">¥：20</mt-badge>
               </div>
             </div>
             <div>
               <p>{{article.zhiye}}</p>
             </div>
-            <div>
-              <p>{{article.jianjie}}</p>
+            <div class="doctor_jian">
+              {{article.jianjie}}
             </div>
           </div>
           </div>
@@ -78,8 +75,16 @@
 </template>
 
 <style>
+.mint-navbar .mint-tab-item.is-selected p{
+  color: #fff; 
+}
+.mint-navbar .mint-tab-item.is-selected {
+    background:  #26a2ff;
+    border: 0;
+    margin-bottom: -3px;
+}
+
 .mint-header {
-  background: #3DCDB4;
   width: 100%;
   height: 60px;
 }
@@ -92,6 +97,7 @@
   margin: 10px auto;
   font-size: 18px;
   color: #999;
+  margin-bottom: 50px;
 }
 .doctor_m-s {
   margin-bottom: 20px;
@@ -103,17 +109,17 @@
 .doctor_m_aa {
   text-decoration: none;
   padding: 5px;
-  border: 1px solid #3DCDB4;
+  border: 1px solid #26A2FF;
   position: relative;
   left: 20px;
 }
 .doctor_m_a {
-  background-color: #3DCDB4;
+  background-color: #26A2FF;
   color: #fff;
 }
 
 .doctor_m_aa {
-  color: #3DCDB4;
+  color: #26A2FF;
 }
 
 .mint-navbar .mint-tab-item {
@@ -121,7 +127,7 @@
   margin: 10px auto;
 }
 .mint-navbar .mint-tab-item p {
-  font-size: 18px;
+  font-size: 15px;
   margin: 5px;
   color: #999;
 }
@@ -146,7 +152,7 @@
   margin: 5px auto;
 }
 .doctor_div div+div {
-  margin: 15px auto;
+  margin: 15px 0;
 }
 .doctor_name {
   height: 20;
@@ -157,13 +163,22 @@
   display: flex;
 }
 
+#tab-container1 {
+  position:relative;
+}
+
 .doctor_yh {
   font-size: 18px;
   margin-right: 10px;
-  position: relative;
-  left: 120px;
+  position: absolute;
+  right: 0;
 }
 
+.doctor_jian {
+  width: 220px;
+  overflow: hidden;
+  text-overflow:ellipsis;
+}
 </style>
 
 <script>
@@ -176,10 +191,19 @@ export default {
       week:'',
       time:'',
       day:'',
+      month:'',
+      weekArr : [ "周日", "周一", "周二", "周三", "周四", "周五", "周六" ,"周日", "周一", "周二", "周三", "周四", "周五", "周六","周日", "周一", "周二", "周三", "周四", "周五", "周六"],
       stt:[
         {
         name:"jj",
         zhiye:'主治医生',
+        jianjie:'asdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkasasdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkas',
+        yh:'6',
+        img:require('../../assets/avatar/d2b0d8ac6b02437b8b207a398f94b1d.jpg')
+        },
+        {
+        name:"jj",
+        zhiye:'主治医生',
         jianjie:'asdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkas',
         yh:'6',
         img:require('../../assets/avatar/d2b0d8ac6b02437b8b207a398f94b1d.jpg')
@@ -189,17 +213,9 @@ export default {
         zhiye:'主治医生',
         jianjie:'asdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkas',
         yh:'6',
-
-         img:require('../../assets/avatar/d2b0d8ac6b02437b8b207a398f94b1d.jpg')
-        },
-        {
-        name:"jj",
-        zhiye:'主治医生',
-        jianjie:'asdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkas',
-        yh:'6',
         img:require('../../assets/avatar/d2b0d8ac6b02437b8b207a398f94b1d.jpg')
         },
-         {
+        {
         name:"jj",
         zhiye:'主治医生',
         jianjie:'asdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkas',
@@ -224,16 +240,16 @@ export default {
       let month = date.getMonth() + 1; // 月
       let day = date.getDate(); // 日
       let week = date.getDay(); //星期
-      let weekArr = [ "周日", "周一", "周二", "周三", "周四", "周五", "周六" ];
-      this.week = weekArr[week];
+      this.week = week;
       this.time = `${year}-${month}-${day}`;
       this.day = day;
+      this.month = month;
     }
   },
   mounted() {
     this.currentTime();
-    this.axios.get('').then(res => {
-      
+    this.axios.get('/doctors').then(res => {
+      console.log(res)
     })
   }
 }
