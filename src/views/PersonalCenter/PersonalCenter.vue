@@ -9,14 +9,17 @@
     <!-- 顶部结束 -->
     
     <div id="parent">
-      <div v-if="this.$store.state.yy_logined==0"></div>
-      <div v-else>
-       <div class="avatar"><img src="../../assets/avatar.jpg" alt=""></div>
+      <div v-if="this.$store.state.vuexhui.yy_logined==0">
+        <mt-button>注册</mt-button>
+        <mt-button>登录</mt-button>
+       </div>
+       <div v-else>
+         <div class="avatar"><img src="../../assets/avatar.jpg" alt=""></div>
        <div class="text">
          <p>用户名</p>
          <p>15988888888</p>
        </div>
-       </div>
+      </div>
     </div>
     <mt-cell title="历史预约" to="/oldyuyue" is-link></mt-cell>
     <mt-cell title="我的预约" to="/yuyue" is-link></mt-cell>
@@ -49,3 +52,13 @@
   margin-right: 20px;
 }
 </style>
+<script>
+export default {
+  mounted(){
+    console.log(localStorage.getItem("yy_logined"));
+    console.log(this.$store.state.vuexhui.yy_logined);
+    console.log(this.$store.state.vuexhui.username);
+    console.log(this.$store.state.vuexhui.phone);
+  }
+}
+</script>

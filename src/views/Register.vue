@@ -45,7 +45,7 @@
 export default {
   data(){
     return{
-      enabled:false,
+      enabled:true,
       text:"获取验证码",
       phone:"",
       password:"",
@@ -71,10 +71,11 @@ export default {
       },1000);  
     },
     getPhone(){
-      //校验用户名
+      //校验手机号
       let phoneRegExp=/^1[3-9]\d{9}$/;
       if(phoneRegExp.test(this.phone)){
          this.nameStatus="success";
+         this.enabled=false;
          return true;
       }else{
         //简洁的短消息提示框
@@ -96,7 +97,7 @@ export default {
         this.nameStatus2="error";
         //简洁的短消息提示框
         this.$toast({
-          message:"密码为必填项",
+          message:"请输入6-20位，由字母、数字、下划线组成的密码",
           position:"middle",
           duration:"2000"
           });
@@ -122,7 +123,15 @@ export default {
         //将获取到的信息提交到web服务器
         this.axios.post("/user/register",`phone=${this.phone}&password=${this.password}`).then(res=>{
           if(res.data.code==200){
-              this.$router.push("/");  
+              this.$toast({
+                message:"注册成功！",
+                position:"middle",
+                duration:"1000"
+              });
+              setTimeout(()=>{
+                this.$router.push("/"); 
+              },1000);  
+              
           }else if(res.data.code==601){
             this.$messagebox("注册提示","手机号已被占用");
           }
