@@ -13,8 +13,10 @@
         <a href="javascript:;" class="doctor_m_a">按时期预约</a>
         <a href="javascript:;" class="doctor_m_aa">按医生预约</a>
       </div>
+      
       <!-- 分页开始 -->
       <mt-navbar v-model="active" class="mint-navbar">
+      <div class="tab_item1 tab_item1_1 tab_item_x">
         <mt-tab-item id="tab-container1" class="mint-tab-item">
           <p>{{weekArr[week]}}</p>
           <p>{{day}}</p>
@@ -43,8 +45,40 @@
           <p>{{weekArr[week + 6]}}</p>
           <p>{{day + 6}}</p>
         </mt-tab-item>
+        </div>
+        <div class="tab_item2 tab_item2_2 tab_item_x">
+        <mt-tab-item id="tab-container8" class="mint-tab-item">
+          <p>{{weekArr[week]}}</p>
+          <p>{{day}}</p>
+        </mt-tab-item>
+        <mt-tab-item id="tab-container9" class="mint-tab-item">
+          <p>{{weekArr[week + 1]}}</p>
+          <p>{{day + 1}}</p>
+        </mt-tab-item>
+        <mt-tab-item id="tab-container10" class="mint-tab-item">
+          <p>{{weekArr[week + 2]}}</p>
+          <p>{{day + 2}}</p>
+        </mt-tab-item>
+        <mt-tab-item id="tab-container11" class="mint-tab-item">
+          <p>{{weekArr[week + 3]}}</p>
+          <p>{{day + 3}}</p>
+        </mt-tab-item>
+        <mt-tab-item id="tab-container12" class="mint-tab-item">
+          <p>{{weekArr[week + 4]}}</p>
+          <p>{{day + 4}}</p>
+        </mt-tab-item>
+        <mt-tab-item id="tab-container13" class="mint-tab-item">
+          <p>{{weekArr[week + 5]}}</p>
+          <p>{{day + 5}}</p>
+        </mt-tab-item>
+        <mt-tab-item id="tab-container14" class="mint-tab-item">
+          <p>{{weekArr[week + 6]}}</p>
+          <p>{{day + 6}}</p>
+        </mt-tab-item>
+        </div>
       </mt-navbar>
       <!-- 分页内容 -->
+      <div class="mt-tab-container">
       <mt-tab-container v-model="active">
         <mt-tab-container-item id="tab-container1" >
           <div class="doctor_article" v-for="(article,index) of stt" :key = "index">
@@ -70,27 +104,67 @@
           </div>
         </mt-tab-container-item>
       </mt-tab-container>
+      </div>
     </div>
   </div>
 </template>
 
 <style>
-.mint-navbar .mint-tab-item.is-selected p{
-  color: #fff; 
+
+.tab_item1 {
+  /*display: none;*/
+  position: absolute;
+  left: 0;
+  right: 0;
+
 }
-.mint-navbar .mint-tab-item.is-selected {
-    background:  #26a2ff;
-    border: 0;
-    margin-bottom: -3px;
+.tab_item1_1{
+transform:translateX(-100%);
+transition:transform 1s ease-in-out;
 }
 
+.tab_item_x {
+  transform:translateX(0);
+  transition:transform 1s ease-in-out;
+}
+
+.tab_item2 {
+  /*display: none;*/
+  position: absolute;
+  left: 0;
+  right: 0;
+  transform: translateX(100%);
+}
+
+.tab_item2_2{
+transform:translateX(100%);
+transition:transform 1s ease-in-out;
+}
+
+/* 改变被选中时tab栏切换的字体样式 */
+.mint-navbar .mint-tab-item.is-selected p{
+  color: #fff;
+}
+
+/* 改变被选中时tab栏切换的样式 */
+.mint-navbar .mint-tab-item.is-selected {
+  background:  #26a2ff;
+  border: 0;
+  margin-bottom: -3px;
+}
+
+/* 改变头部样式 */
 .mint-header {
   width: 100%;
   height: 60px;
 }
+
 .mint-navbar {
   width: 100%;
+  position: relative;
 }
+
+/* 整个中间的容器 */
 .doctor_m {
   width: 100%;
   position: absolute;
@@ -99,6 +173,7 @@
   color: #999;
   margin-bottom: 50px;
 }
+
 .doctor_m-s {
   margin-bottom: 20px;
   margin-top: 20px;
@@ -113,6 +188,7 @@
   position: relative;
   left: 20px;
 }
+
 .doctor_m_a {
   background-color: #26A2FF;
   color: #fff;
@@ -123,9 +199,13 @@
 }
 
 .mint-navbar .mint-tab-item {
+  width: 10%;
+  float: left;
   padding: 5px;
-  margin: 10px auto;
+  margin: 10px 3px;
+  
 }
+
 .mint-navbar .mint-tab-item p {
   font-size: 15px;
   margin: 5px;
@@ -133,27 +213,36 @@
 }
 
 /* 分页容器 */
+.mt-tab-container {
+  margin-top: 70px;
+}
+
 .doctor_article {
   display: flex;
   margin: 8px 5px;
 }
 
 /* 医生图容器 */
+/* 图片样式 */
 .article_image{
   margin-right: 15px;
 }
+
 .article_image img{
   width:112px;
   border-radius: 5px;
 }
+
 .doctor_div,
 .doctor_name {
   width: 100%;
   margin: 5px auto;
 }
+
 .doctor_div div+div {
   margin: 15px 0;
 }
+
 .doctor_name {
   height: 20;
   color: #000;
@@ -236,7 +325,7 @@ export default {
   methods:{
     currentTime() {
       let date = new Date();
-       let year = date.getFullYear(); // 年
+      let year = date.getFullYear(); // 年
       let month = date.getMonth() + 1; // 月
       let day = date.getDate(); // 日
       let week = date.getDay(); //星期
@@ -248,9 +337,9 @@ export default {
   },
   mounted() {
     this.currentTime();
-    this.axios.get('/doctors').then(res => {
-      console.log(res)
-    })
+    //this.axios.get('/doctors').then(res => {
+    //  //console.log(res)
+    //})
   }
 }
 </script>
