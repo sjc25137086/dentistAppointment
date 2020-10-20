@@ -14,15 +14,25 @@
             <div id="sex">
                 <p>性别</p>
                 <div>
-                    <input type="radio" name="fsex" value="1"> 男
-                    <input type="radio" name="fsex" value="0"> 女
+                    <!-- <input type="radio" name="fsex" value="1" v-model="sex"> 男
+                    <input type="radio" name="fsex" value="0" v-model="sex"> 女 
+                    -->
+                    <!-- <input type="radio" name="fsex" v-for="(item,index) in list" :key="index" :value="item.value" v-model="checkedValue" @blur="checkFsex">{{sex}} -->
+                    <div class="userSex">
+                        <label>
+                            <input type="radio" name="fsex" v-model="checkedValue" @focus="checkFsex" value="1">男
+                        </label>
+                        <label>
+                            <input type="radio" name="fsex" v-model="checkedValue" @focus="checkFsex" value="0">女
+                        </label>
+                    </div>
                 </div>
             </div>
             <mt-field type="text" label="身份证号码" placeholder="请输入您的身份证号码" :attr="{maxlength:18,autocomplete:'off'}" v-model="isCard" @blur.native.capture="checkIsCard" :state="isCardState"></mt-field>
-            <mt-field type="number" label="电话号码" placeholder="请输入您的电话号码" :attr="{maxlength:11,autocomplete:'off'}" v-model="phone" @blur.native.capture="checkPhone" :state="phoneState"></mt-field>
+            <mt-field type="number" label="电话号码" placeholder="请输入您的电话号码" :attr="{maxlength:11}" v-model="inPhone" @blur.native.capture="checkPhone" :state="phoneState"></mt-field>
         </div>
         <div id="button">
-            <mt-button type="primary" size="large" @click="determine">确定挂号</mt-button>
+            <mt-button type="primary" size="large" @click="determine">确定预约</mt-button>
         </div>
     </div>
 </template>
@@ -43,7 +53,7 @@
     #sex div{
         width: 250px;height: 27px;
     }
-    #sex div>input{
+    #sex div>label:last-child{
         margin-left: 10px;
     }
     #button{
@@ -57,9 +67,15 @@ export default {
             fname:'',//姓名
             fnameState:'',//姓名状态
             fage:'',//年龄
+            checkedValue:'',
+            // list:[
+            //     {value:1},
+            //     {value:0}
+            // ],
+            sex:'',
             isCard:'',//身份证号码
             isCardState:'',//身份证状态
-            phone:'',//电话号码
+            inPhone:'',//电话号码
             phoneState:'',//电话号码状态
         }
     },
@@ -81,10 +97,29 @@ export default {
             let age=this.fage.split(/-/g)[0];
             let year=new Date().getFullYear();
             let fage=parseInt(year-age);
+            if(fage<0){
+                this.$toast('生日填写不正确');
+                return false;
+            }
+            if(fage>=0){
+                return true;
+            }
+        },
+        //性别
+        checkFsex(){
+            let sex=document.querySelectorAll('.userSex input')
+            console.log(sex)
+            if(this.checkedValue==1){
+                sex[0].checked=true;
+            }
+            if(this.checkedValue==0){
+                sex[1].checked=true;
+            }
+            // console.log(this.checkedValue)
         },
         //校验身份证
         checkIsCard(){
-            let isCardRegExp=/^[1][0-9]{14}([0-9]{2}[0-9X])*$/;
+            let isCardRegExp=/^[0-9]{15}([0-9]{2}[0-9X])*$/;
             if(isCardRegExp.test(this.isCard)){
                 this.isCardState="success";
                 return true;
@@ -96,8 +131,8 @@ export default {
         },
         //校验电话号码
         checkPhone(){
-            let phoneRegExp=/^[1][3-9][0-9]{9}$/;
-            if(phoneRegExp.test(this.phone)){
+            let phoneRegExp=/^1[3-9]\d{9}$/;
+            if(phoneRegExp.test(this.inPhone)){
                 this.phoneState="success";
                 return true;
             }else{
@@ -106,7 +141,18 @@ export default {
             this.phoneState="error";
             return false;
         },
-        determine(){}
+        determine(){
+            if(this.checkFname() && this.checkFage() && this.checkIsCard() && this.checkPhone()){
+                this.axios.post('/user/forward',`doctorid=1&fname=${this.fname}&fage=${this.fage}&fsex=${this.checkedValue}&idCard=${this.isCard}&phone=${this.inPhone}&userid=1&time=160346895214`).then(res=>{
+                    if(res.data.code==200){
+                        this.$messagebox("预约信息","恭喜，预约成功")
+                        this.$router.push('/Yuyue');
+                    }else{
+                        this.$messagebox("预约信息","抱歉，您填写的信息有误");
+                    }
+                })
+            }
+        }
     }
 }
 </script>
