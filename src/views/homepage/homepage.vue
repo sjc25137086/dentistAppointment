@@ -102,6 +102,9 @@ export default {
         return{
             active:2
         }
+    },
+    mounted() {
+        console.log(this.$store.state.doctor.doctorId)
     }
 }
 </script>

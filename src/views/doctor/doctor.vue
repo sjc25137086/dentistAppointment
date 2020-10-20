@@ -81,24 +81,25 @@
       <div class="mt-tab-container">
       <mt-tab-container v-model="active">
         <mt-tab-container-item id="tab-container1" >
-          <div class="doctor_article" v-for="(article,index) of stt" :key = "index">
+          <div class="doctor_article" v-for="(article,index) of info" :key = "index" @click="subt(article.id)">
           <!-- 医生图片 -->
           <div class="article_image" >
-            <img :src='article.img'>
+            <img :src="info.img">
           </div>
           <!-- 旁边的div -->
           <div class="doctor_div">
             <div class="doctor_name">
-              <span>{{article.name}}</span>
+              <span>{{article.dname}}</span>
               <div class="doctor_yh">
-                <mt-badge size="small" color="#26A2FF">¥：20</mt-badge>
+                <mt-badge size="small" color="#26A2FF">¥：{{article.price}}</mt-badge>
               </div>
             </div>
             <div>
-              <p>{{article.zhiye}}</p>
+              <p>{{article.dage}}</p>
+              <p>{{article.dposition}}</p>
             </div>
             <div class="doctor_jian">
-              {{article.jianjie}}
+             {{article.description}}
             </div>
           </div>
           </div>
@@ -112,11 +113,9 @@
 <style>
 
 .tab_item1 {
-  /*display: none;*/
   position: absolute;
   left: 0;
   right: 0;
-
 }
 .tab_item1_1{
 transform:translateX(-100%);
@@ -124,6 +123,7 @@ transition:transform 1s ease-in-out;
 }
 
 .tab_item_x {
+  justify-content: space-between;
   transform:translateX(0);
   transition:transform 1s ease-in-out;
 }
@@ -155,13 +155,14 @@ transition:transform 1s ease-in-out;
 
 /* 改变头部样式 */
 .mint-header {
-  width: 100%;
   height: 60px;
 }
 
 .mint-navbar {
-  width: 100%;
   position: relative;
+  overflow-y: auto;
+  height: 70px;
+  border-bottom: 1px solid #26a2ff;
 }
 
 /* 整个中间的容器 */
@@ -175,7 +176,8 @@ transition:transform 1s ease-in-out;
 }
 
 .doctor_m-s {
-  margin-bottom: 20px;
+  width: 100%;
+  margin-bottom: 10px;
   margin-top: 20px;
   margin-left: 5px;
 }
@@ -186,7 +188,7 @@ transition:transform 1s ease-in-out;
   padding: 5px;
   border: 1px solid #26A2FF;
   position: relative;
-  left: 20px;
+  right: -5%;
 }
 
 .doctor_m_a {
@@ -202,24 +204,22 @@ transition:transform 1s ease-in-out;
   width: 10%;
   float: left;
   padding: 5px;
-  margin: 10px 3px;
-  
+  margin: 5px 3px;
 }
 
 .mint-navbar .mint-tab-item p {
   font-size: 15px;
-  margin: 5px;
+  margin: 5px 0;
   color: #999;
 }
 
 /* 分页容器 */
-.mt-tab-container {
-  margin-top: 70px;
-}
 
 .doctor_article {
   display: flex;
   margin: 8px 5px;
+  border-bottom: 1px solid #26a2ff;
+
 }
 
 /* 医生图容器 */
@@ -230,6 +230,7 @@ transition:transform 1s ease-in-out;
 
 .article_image img{
   width:112px;
+  margin-top: 5px;
   border-radius: 5px;
 }
 
@@ -263,10 +264,16 @@ transition:transform 1s ease-in-out;
   right: 0;
 }
 
-.doctor_jian {
-  width: 220px;
+/* 设置文本 */
+.doctor_div {
   overflow: hidden;
+}
+.doctor_jian {
+  height: 20px;
+  overflow: hidden;
+  /* 将溢出的文本变成省略号 */
   text-overflow:ellipsis;
+  white-space: nowrap;
 }
 </style>
 
@@ -281,65 +288,41 @@ export default {
       time:'',
       day:'',
       month:'',
+      info:'',
+      docx:'',
       weekArr : [ "周日", "周一", "周二", "周三", "周四", "周五", "周六" ,"周日", "周一", "周二", "周三", "周四", "周五", "周六","周日", "周一", "周二", "周三", "周四", "周五", "周六"],
-      stt:[
-        {
-        name:"jj",
-        zhiye:'主治医生',
-        jianjie:'asdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkasasdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkas',
-        yh:'6',
-        img:require('../../assets/avatar/d2b0d8ac6b02437b8b207a398f94b1d.jpg')
-        },
-        {
-        name:"jj",
-        zhiye:'主治医生',
-        jianjie:'asdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkas',
-        yh:'6',
-        img:require('../../assets/avatar/d2b0d8ac6b02437b8b207a398f94b1d.jpg')
-        },
-        {
-        name:"jj",
-        zhiye:'主治医生',
-        jianjie:'asdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkas',
-        yh:'6',
-        img:require('../../assets/avatar/d2b0d8ac6b02437b8b207a398f94b1d.jpg')
-        },
-        {
-        name:"jj",
-        zhiye:'主治医生',
-        jianjie:'asdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkas',
-        yh:'6',
-        img:require('../../assets/avatar/d2b0d8ac6b02437b8b207a398f94b1d.jpg')
-        },
-         {
-        name:"jj",
-        zhiye:'主治医生',
-        jianjie:'asdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkas',
-        yh:'6',
-        img:require('../../assets/avatar/d2b0d8ac6b02437b8b207a398f94b1d.jpg')
-        },
-        ]
-      
     }
   },
   methods:{
     currentTime() {
+      //获取系统时间
       let date = new Date();
       let year = date.getFullYear(); // 年
       let month = date.getMonth() + 1; // 月
-      let day = date.getDate(); // 日
+      let day = date.getDate() ; // 日
       let week = date.getDay(); //星期
       this.week = week;
       this.time = `${year}-${month}-${day}`;
       this.day = day;
       this.month = month;
+    },
+    subt(i) {
+      //this.$store.state.doctorId = i;
+      this.$router.push('/homepage');
     }
   },
   mounted() {
+    //在页面重载的时候调用方法currentTime
     this.currentTime();
-    //this.axios.get('/doctors').then(res => {
-    //  //console.log(res)
-    //})
+    //发送请求接受医生信息
+    this.axios.get('/search/doctors',{params:{ksid:1}}).then(res => {
+      let doctors = res.data.result;
+      if(doctors.img == null) {
+        doctors.img = require('../../assets/avatar/doctors.jpg')
+      }
+      this.info = doctors;
+      console.log(doctors)
+    })
   }
 }
 </script>

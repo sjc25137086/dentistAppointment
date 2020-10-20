@@ -11,6 +11,8 @@ import '../public/css/reset.css'
 import 'mint-ui/lib/style.min.css';
 import 'element-ui/lib/theme-chalk/index.css'
 import { Popup } from 'mint-ui';
+
+
 Vue.use(Elementui)
 Vue.component(Popup.name, Popup)
 Vue.use(Mint);
