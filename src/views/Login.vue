@@ -94,9 +94,7 @@ export default {
            if(res.data.code==200){
              //用户登录成功
              //提交mutations
-             this.$store.commit("login");
-             //将键值保存起来，防止刷新网页数据恢复到未登陆的状态
-             //localStorage.setItem("yy_logined","1");
+             this.$store.commit("login",res.data.result[0]);
              this.$toast({
                 message:"登录成功！",
                 position:"middle",
@@ -105,7 +103,6 @@ export default {
               setTimeout(()=>{
                 this.$router.push("/"); 
               },1000);  
-              
            }else{
             this.$messagebox("登录提示","用户名或密码错误");
            }

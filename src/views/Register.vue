@@ -69,6 +69,15 @@ export default {
         count--;
       }
       },1000);  
+      this.axios.post("/user/regsend",`phone=${this.phone}`).then(res=>{
+         if(res.data.code==200){
+           this.$toast({
+                message:"验证码发送成功！",
+                position:"middle",
+                duration:"1000"
+              });
+         }
+      });
     },
     getPhone(){
       //校验手机号
@@ -131,7 +140,8 @@ export default {
               setTimeout(()=>{
                 this.$router.push("/"); 
               },1000);  
-              
+              //用户注册成功后自动登录
+              this.$store.commit("login",res.data.result[0]);
           }else if(res.data.code==601){
             this.$messagebox("注册提示","手机号已被占用");
           }

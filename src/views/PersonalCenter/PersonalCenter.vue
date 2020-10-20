@@ -8,16 +8,18 @@
     </mt-header>
     <!-- 顶部结束 -->
     
-    <div id="parent">
-      <div v-if="this.$store.state.vuexhui.yy_logined==0">
-        <mt-button>注册</mt-button>
-        <mt-button>登录</mt-button>
+    <div id="parent" v-if="this.$store.state.vuexhui.yy_logined==0">
+      <div>
+        <router-link to="/register"><mt-button>注册</mt-button></router-link>
+        <router-link to="/login"><mt-button>登录</mt-button></router-link>
        </div>
-       <div v-else>
+       </div>
+      <div id="parent-login" v-else> 
+       <div>
          <div class="avatar"><img src="../../assets/avatar.jpg" alt=""></div>
        <div class="text">
-         <p>用户名</p>
-         <p>15988888888</p>
+         <p>{{this.$store.state.vuexhui.username}}</p>
+         <p>{{this.$store.state.vuexhui.phone}}</p>
        </div>
       </div>
     </div>
@@ -26,11 +28,15 @@
   </div>
 </template>
 <style scoped>
-#parent{
-  background-image: url("../../assets/timg.jpg");
+#parent-login,#parent{
   height: 200px;
-  margin-top: 5px;
   overflow: hidden;
+}
+#parent-login{
+  background-image: url("../../assets/timg.jpg");
+}
+#parent{
+  background-image: url("../../assets/timg-1.jpg");
 }
 .avatar>img{
   width: 100px;
@@ -55,7 +61,6 @@
 <script>
 export default {
   mounted(){
-    console.log(localStorage.getItem("yy_logined"));
     console.log(this.$store.state.vuexhui.yy_logined);
     console.log(this.$store.state.vuexhui.username);
     console.log(this.$store.state.vuexhui.phone);
