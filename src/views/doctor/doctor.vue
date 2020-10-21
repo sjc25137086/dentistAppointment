@@ -17,70 +17,16 @@
       <!-- 分页开始 -->
       <mt-navbar v-model="active" class="mint-navbar">
       <div class="tab_item1 tab_item1_1 tab_item_x">
-        <mt-tab-item id="tab-container1" class="mint-tab-item">
-          <p>{{weekArr[week]}}</p>
-          <p>{{day}}</p>
+        <mt-tab-item :id="i" class="mint-tab-item" v-for="(time,i) of 14" :key="i"  @click.native="click_delay(i)">
+          <p>{{weekArr[week + i]}}</p> 
+          <p>{{day[i]}}</p>
         </mt-tab-item>
-        <mt-tab-item id="tab-container2" class="mint-tab-item">
-          <p>{{weekArr[week + 1]}}</p>
-          <p>{{day + 1}}</p>
-        </mt-tab-item>
-        <mt-tab-item id="tab-container3" class="mint-tab-item">
-          <p>{{weekArr[week + 2]}}</p>
-          <p>{{day + 2}}</p>
-        </mt-tab-item>
-        <mt-tab-item id="tab-container4" class="mint-tab-item">
-          <p>{{weekArr[week + 3]}}</p>
-          <p>{{day + 3}}</p>
-        </mt-tab-item>
-        <mt-tab-item id="tab-container5" class="mint-tab-item">
-          <p>{{weekArr[week + 4]}}</p>
-          <p>{{day + 4}}</p>
-        </mt-tab-item>
-        <mt-tab-item id="tab-container6" class="mint-tab-item">
-          <p>{{weekArr[week + 5]}}</p>
-          <p>{{day + 5}}</p>
-        </mt-tab-item>
-        <mt-tab-item id="tab-container7" class="mint-tab-item">
-          <p>{{weekArr[week + 6]}}</p>
-          <p>{{day + 6}}</p>
-        </mt-tab-item>
-        </div>
-        <div class="tab_item2 tab_item2_2 tab_item_x">
-        <mt-tab-item id="tab-container8" class="mint-tab-item">
-          <p>{{weekArr[week]}}</p>
-          <p>{{day}}</p>
-        </mt-tab-item>
-        <mt-tab-item id="tab-container9" class="mint-tab-item">
-          <p>{{weekArr[week + 1]}}</p>
-          <p>{{day + 1}}</p>
-        </mt-tab-item>
-        <mt-tab-item id="tab-container10" class="mint-tab-item">
-          <p>{{weekArr[week + 2]}}</p>
-          <p>{{day + 2}}</p>
-        </mt-tab-item>
-        <mt-tab-item id="tab-container11" class="mint-tab-item">
-          <p>{{weekArr[week + 3]}}</p>
-          <p>{{day + 3}}</p>
-        </mt-tab-item>
-        <mt-tab-item id="tab-container12" class="mint-tab-item">
-          <p>{{weekArr[week + 4]}}</p>
-          <p>{{day + 4}}</p>
-        </mt-tab-item>
-        <mt-tab-item id="tab-container13" class="mint-tab-item">
-          <p>{{weekArr[week + 5]}}</p>
-          <p>{{day + 5}}</p>
-        </mt-tab-item>
-        <mt-tab-item id="tab-container14" class="mint-tab-item">
-          <p>{{weekArr[week + 6]}}</p>
-          <p>{{day + 6}}</p>
-        </mt-tab-item>
-        </div>
+      </div>
       </mt-navbar>
       <!-- 分页内容 -->
       <div class="mt-tab-container">
       <mt-tab-container v-model="active">
-        <mt-tab-container-item id="tab-container1" >
+        <mt-tab-container-item :id="i"  v-for="(time,i) of 14" :key="i">
           <div class="doctor_article" v-for="(article,index) of info" :key = "index" @click="subt(article.id)">
           <!-- 医生图片 -->
           <div class="article_image" >
@@ -116,6 +62,9 @@
   position: absolute;
   left: 0;
   right: 0;
+  width: 200%;
+  display: flex;
+  justify-content: space-between;
 }
 .tab_item1_1{
 transform:translateX(-100%);
@@ -201,7 +150,7 @@ transition:transform 1s ease-in-out;
 }
 
 .mint-navbar .mint-tab-item {
-  width: 10%;
+  width: 5%;
   float: left;
   padding: 5px;
   margin: 5px 3px;
@@ -211,6 +160,9 @@ transition:transform 1s ease-in-out;
   font-size: 15px;
   margin: 5px 0;
   color: #999;
+}
+.mint-navbar .mint-tab-item p+p {
+  font-size: 12px;
 }
 
 /* 分页容器 */
@@ -283,46 +235,76 @@ transition:transform 1s ease-in-out;
 export default {
   data(){
     return {
-      active:'tab-container1',
+      active:0,
       week:'',
       time:'',
-      day:'',
-      month:'',
+      day:[],
+      delay:0,
       info:'',
       docx:'',
       weekArr : [ "周日", "周一", "周二", "周三", "周四", "周五", "周六" ,"周日", "周一", "周二", "周三", "周四", "周五", "周六","周日", "周一", "周二", "周三", "周四", "周五", "周六"],
     }
   },
+  watch:{
+
+  },
   methods:{
+     click_delay(i) {
+      this.delay = i;
+      //获取时间格式
+      let startTime = new Date(new Date().setDate(new Date().getDate() ));
+      let endTime = new Date(new Date().setDate(new Date().getDate() + 2));
+      let day1 = startTime.toLocaleDateString();    
+      let day2 = endTime.toLocaleDateString();    
+      console.log(day1,day2);
+      console.log(this.moment(day1).valueOf());
+      console.log(this.moment(day2).valueOf());
+      //let day = date.getDate(); // 日
+      //let Ms = new Date(date.setDate(date.getDate() + this.delay)).toLocaleDateString();
+      //2020-8-22 2020-8-23
+
+      //console.log(Ms)
+      //查询医生已被预约的时间
+      this.axios.get('/search/time',{params:{doctorid:`${this.$store.state.doctor.doctorId}`,daystarttime:`${1}`,dayendtime:`${1}`}}).then(res => {
+        console.log(res)
+      })
+     },
     currentTime() {
       //获取系统时间
       let date = new Date();
       let year = date.getFullYear(); // 年
       let month = date.getMonth() + 1; // 月
-      let day = date.getDate() ; // 日
       let week = date.getDay(); //星期
+      let day = date.getDate(); // 日
       this.week = week;
+      for(let n = 0;n < 15;n ++) {
+      date.setDate(date.getDate() +  n) ;
+      let m = (date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1); //获取当前月份的日期，不足10补0
+      let day_one = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+      this.day.push(`${m}-${day_one}`);
+      date.setDate(date.getDate() - n) ;
+      }
       this.time = `${year}-${month}-${day}`;
-      this.day = day;
-      this.month = month;
     },
     subt(i) {
       //this.$store.state.doctorId = i;
+      this.$store.commit('doctorId',i);
       this.$router.push('/homepage');
     }
   },
   mounted() {
     //在页面重载的时候调用方法currentTime
     this.currentTime();
+    this.click_delay(0);
     //发送请求接受医生信息
-    this.axios.get('/search/doctors',{params:{ksid:1}}).then(res => {
+    this.axios.get('/search/doctors',{params:{ksid:`${this.$store.state.doctor.ksid}`}}).then(res => {
       let doctors = res.data.result;
       if(doctors.img == null) {
         doctors.img = require('../../assets/avatar/doctors.jpg')
       }
       this.info = doctors;
-      console.log(doctors)
     })
+    
   }
 }
 </script>

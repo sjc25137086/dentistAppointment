@@ -2,7 +2,7 @@ export default ({
     //物品
     state: {
         doctorId: 1,
-        ksid: '',
+        ksid: 1,
     },
     //记账员 -- getters认为是store的计算属性 
     getters: {
@@ -12,7 +12,9 @@ export default ({
     },
     //搬运工
     mutations: {
-
+        doctorId(state, i) {
+            state.doctorId = i;
+        }
     },
     //拉货的汽车
     actions: {},
