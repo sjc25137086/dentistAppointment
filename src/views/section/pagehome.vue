@@ -22,7 +22,7 @@
     <div>
       <mt-tab-container>
         <mt-tab-container-item>
-          <div class='.doctor_article' v-for='(hospital,i) in hospitalList' :key="i">
+          <div class='.doctor_article' v-for='(hospital,i) in hospitalList' @click="toks(hospital.id)" :key="i">
           <!-- 医生图片 -->
             <div class="article_image" >
               <img src='@/assets/1.jpg'>
@@ -72,6 +72,10 @@ export default {
     helloWorld
   },
   methods: {
+    toks(hospitalid){
+      this.$store.commit('setHospitalid',hospitalid);
+      this.$router.push('/clction')
+    },
     closePopup(){
       this.flag = flase;
       this.areaVisible = false;

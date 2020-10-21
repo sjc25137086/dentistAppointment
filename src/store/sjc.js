@@ -4,9 +4,11 @@ export default{
         ksid:1
     },
     mutations: {
-        setHospitalid(hospitalid){
+        setHospitalid(state,hospitalid){
             state.hospitalid = hospitalid;
-            console.log(hospitalid);
+        },
+        setKsid(state,ksid){
+            state.ksid = ksid;
         }
     },
 }
