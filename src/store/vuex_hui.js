@@ -13,13 +13,23 @@ export default{
   mutations: {
     login(state,payload){
       state.yy_logined=1;
-      //localStorage.setItem("yy_logined","1");
+      localStorage.setItem("yy_logined","1");
       state.username=payload.username;
-      //localStorage.setItem("username",payload.username);
+      localStorage.setItem("username",payload.username);
       state.phone=payload.phone;
-      //localStorage.setItem("phone",payload.phone);
+      localStorage.setItem("phone",payload.phone);
       state.id=payload.id;
-      //localStorage.setItem("id",payload.id);
+      localStorage.setItem("id",payload.id);
+    },
+    logout(state){
+      state.yy_logined=0;
+      localStorage.removeItem('yy_logined');
+      state.username="";
+      localStorage.removeItem('username');
+      state.phone="";
+      localStorage.removeItem('phone');
+      state.id="";
+      localStorage.removeItem('id');
     }
 
   },

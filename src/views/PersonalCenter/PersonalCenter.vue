@@ -2,18 +2,24 @@
   <div>
      <!-- 顶部开始 -->
     <mt-header title="我的个人中心">
-      <router-link to="/" slot="left">
+      <div slot="left" class="back">
+      <router-link to="/">
       <mt-button icon="back"></mt-button>
       </router-link>
+      </div>
+      <div slot="right" class="shortcut" v-if="this.$store.state.vuexhui.yy_logined==0">
+        <router-link to="/register">注册</router-link>
+        <router-link to="/login">登录</router-link>
+      </div>
+      <div slot="right" class="shortcut" v-else>
+         <mt-button type="primary" @click="logout">注销</mt-button>
+       </div>
+      
     </mt-header>
     <!-- 顶部结束 -->
     
     <div id="parent" v-if="this.$store.state.vuexhui.yy_logined==0">
-      <div>
-        <router-link to="/register"><mt-button>注册</mt-button></router-link>
-        <router-link to="/login"><mt-button>登录</mt-button></router-link>
-       </div>
-       </div>
+      </div>
       <div id="parent-login" v-else> 
        <div>
          <div class="avatar"><img src="../../assets/avatar.jpg" alt=""></div>
@@ -28,6 +34,16 @@
   </div>
 </template>
 <style scoped>
+.back a{
+  text-decoration: none;  
+  color:#fff;
+}
+.shortcut a{
+  display:inline-block;
+  margin-left:10px;
+  text-decoration: none;  
+  color:#fff;
+}
 #parent-login,#parent{
   height: 200px;
   overflow: hidden;
@@ -60,10 +76,15 @@
 </style>
 <script>
 export default {
-  mounted(){
-    console.log(this.$store.state.vuexhui.yy_logined);
-    console.log(this.$store.state.vuexhui.username);
-    console.log(this.$store.state.vuexhui.phone);
+  data(){
+    return{
+
+    }
+  },
+  methods:{
+    logout(){
+      this.$store.commit('logout');
+    }
   }
 }
 </script>
