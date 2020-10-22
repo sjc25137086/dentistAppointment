@@ -3,6 +3,8 @@ export default ({
     state: {
         doctorId: 1,
         ksid: 1,
+        daystarttime: '',
+        dayendtime: '',
     },
     //记账员 -- getters认为是store的计算属性 
     getters: {
