@@ -2,16 +2,12 @@
   <div>
      <div >
       <mt-header title="科室列表" class="bgcinfo">
-        <router-link to="/" slot="left">
-          <mt-button icon="back">科室选择</mt-button>
+        <router-link to="/pageHome" slot="left">
+          <mt-button icon="back">选择医院</mt-button>
         </router-link>
       </mt-header>
     </div>
-    
-    <!-- <mt-search v-model="value" placeholder="搜索科室、医生" class="pinfo"></mt-search> -->
-    <!-- <div  v-for="(elem,i) in ksList" :key="i"> -->
     <mt-cell :title="elem.kname" v-for="(elem,i) in ksList" value='点击进入' :key="i" @click.native="toDoctor(elem.id)"></mt-cell>
-    <!-- </div> -->
   </div>
 </template>
 <style scope>
