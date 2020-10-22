@@ -14,7 +14,7 @@
       <!-- 密码输入框 -->
       <mt-field type="password" label="密码" placeholder="请输入密码" :attr="{maxlength:20,autocomplete:'off'}" v-model="password" @blur.native.capture="getPassword" :state="nameStatus2"></mt-field>
       <div>
-      <mt-button size="small" type="default" class="forget-pwd">忘记密码？</mt-button>
+      <router-link to="/forgetPwd"><mt-button size="small" type="default" class="forget-pwd">忘记密码？</mt-button></router-link>
       </div>
       <!-- 登录按钮 -->
       <mt-button class="btn" @click="handle" plain>登录</mt-button>

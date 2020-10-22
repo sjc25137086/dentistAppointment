@@ -55,6 +55,11 @@ const routes = [
         component: ()=>import('../views/PersonalCenter/PersonalCenter.vue')
       },
       {
+        path:'forgetPwd',
+        name: 'forgetPwd',
+        component: ()=>import('../views/forgetPwd/forgetPwd.vue')
+      },
+      {
         path:'information',
         component: ()=>import('../views/information/information.vue')
       },
