@@ -12,8 +12,8 @@
                 <div id="jie">
                     <div class="portrait"></div>
                     <div id="text">
-                        <p>小红</p>
-                        <p>口腔外科/主治医师</p>
+                        <p>{{homeInfo[0].dname}}</p>
+                        <p>{{homeInfo[0].dposition}}</p>
                     </div>
                 </div>
                 <div id="icon">
@@ -21,7 +21,7 @@
                     <img src="../../assets/icon/share1.png" alt="">
                 </div>
             </div>
-            <p id="explain">擅长：复杂阻生齿拔除，口腔外科门诊手术，口腔种植</p>
+            <p id="explain">{{homeInfo[0].intro}}</p>
             <mt-navbar v-model="active">
                 <mt-tab-item id="1">挂号</mt-tab-item>
                 <mt-tab-item id="2">介绍</mt-tab-item>
@@ -31,24 +31,20 @@
         <mt-tab-container v-model="active" class="main">
             <mt-tab-container-item id="1">
                 <div id="gua">
-                    <p>2020-10-15</p>
-                    <p>
-                        <span>更多日期</span>
-                        <img src="" alt="">
-                    </p>
+                    <p>{{this.moment(this.$store.state.dayendtime).format('Y年MM月DD日')}} 星期{{this.moment(this.$store.state.dayendtime).format('e')}}</p>
                 </div>
-                <mt-cell v-for="(a,i) of am" :key="i" :title="a.nei">
-                    <mt-button type="primary" size="small" @click="yu">预约</mt-button>
+                <mt-cell v-for="(a,i) of am" :key="i" :title="a.hour">
+                    <mt-button type="primary" size="small" @click="yuyue(a.hour)" :disabled="isdisabled">预约</mt-button>
                 </mt-cell>
             </mt-tab-container-item>
             <mt-tab-container-item id="2">
                 <div class="nei">
                     <p>擅长</p>
-                    <p>复杂阻生齿拔除，口腔外科门诊手术，口腔种植</p>
+                    <p>{{homeInfo[0].intro}}</p>
                 </div>
                 <div class="nei">
                     <p>介绍</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis delectus itaque, quis necessitatibus fuga veniam? Magni, consequuntur debitis ipsum tempora reiciendis animi sunt eum, dicta optio laborum non sapiente consequatur accusantium, quos rerum vel modi fuga fugiat exercitationem nostrum veniam. Vel vero excepturi dolores! Cumque est placeat assumenda doloribus dolorum.</p>
+                    <p>{{homeInfo[0].description}}</p>
                 </div>
             </mt-tab-container-item>
         </mt-tab-container>
@@ -56,15 +52,15 @@
             <div>
                 <div class="portrait"></div>
                 <div>
-                    <p>医师：<span>小红</span></p>
-                    <p>科室：<span>口腔外科</span></p>
-                    <p>费用：<span>8.00</span></p>
-                    <p>时段：<span>2020-10-17 星期六 AM 8:00~9:00</span></p>
+                    <p>医师：<span>{{homeInfo[0].dname}}</span></p>
+                    <p>科室：<span>{{homeInfo[0].dposition}}</span></p>
+                    <p>费用：<span>{{homeInfo[0].price}}</span></p>
+                    <p>时段：<span>{{this.moment(this.$store.state.dayendtime).format('Y年MM月DD日 星期e')+' '+this.q}}</span></p>
                 </div>
             </div>
-            <p>请点击下方加号添加就诊人</p>
-            <img src="" alt="">
-            <mt-button type="primary" size="large" disabled>确认挂号</mt-button>
+            <!-- <p>请点击下方加号添加就诊人</p>
+            <img src="" alt=""> -->
+            <mt-button type="primary" size="large" @click="confirm">确认预约</mt-button>
         </mt-popup>
     </div>
 </template>
@@ -83,6 +79,7 @@
         width: 80px;height: 80px;
         background-color: lightgrey;
         border-radius: 5px;
+        margin-right:10px ;
     }
     #text{
         color: #fff;
@@ -102,7 +99,10 @@
     #explain{
         color: #eee;font-size: 12px;
         background-color: #26a2ff;
-        padding: 10px 0px 10px 20px;
+        padding: 10px 0px 10px 30px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
     #jian{
         height: 10px;
@@ -123,6 +123,7 @@
     .nei>p:last-child{
         font-size: 14px;
         color: #666;
+        line-height: 20px;
     }
     #gua,#hour{
         display: flex;
@@ -164,32 +165,97 @@
 export default {
     data(){
         return{
-            active:2,
+            active:"1",
             popupVisible:false,
-            am:[
-                {nei:'8:00',faid:'1'},
-                {nei:'9:00',faid:'1'},
-                {nei:'10:00',faid:'0'},
-                {nei:'11:00',faid:'1'},
-                {nei:'12:00',faid:'1'},
+            homeInfo:[
+                {
+                    dname:'网络错误',
+                    dposition:'网络错误',
+                    intro:'网络错误',
+                    description:'网络错误',
+                    price:'0',
+                    
+                }
             ],
+            am:[
+                {hour:'8:00'},
+                {hour:'8:30'},
+                {hour:'9:00'},
+                {hour:'9:30'},
+                {hour:'10:00'},
+                {hour:'10:30'},
+                {hour:'11:00'},
+                {hour:'11:30'},
+                {hour:'12:00'},
+                {hour:'14:00'},
+                {hour:'14:30'},
+                {hour:'15:00'},
+                {hour:'15:30'},
+                {hour:'16:00'},
+                {hour:'16:30'},
+                {hour:'17:00'},
+                {hour:'17:30'},
+                {hour:'18:00'}
+            ],
+            isdisabled:false,
+            q:'',
+            add:[]
         }
     },
+    watch:{
+    //     myday(){
+    //         let myda=new Date();
+    //         let myd=myda.getDay()
+    //         this.myday=weekday[myd]
+    //     }
+        // confirm(value){}
+    },
     methods:{
-        confirm(){
-            this.popupVisible=true
+        yuyue(i){
+            this.popupVisible=true;
+            this.q = i;
+            console.log(this.add)
+            this.add.forEach(item=>{
+                console.log(1111111)
+                if(item==null){
+                    this.isdisabled=false
+                }
+            })
+            //console.log(this.q)
         },
-        yu(){
-            for(let a in this.am){
-                let b=this.am[a].faid;
-            }
-            // console.log(b)
-            // if(b=='1'){
-            //         this.$router.push('/information')
-            //     }else{
-                    
-            //     }
+        confirm(){
+            //拼接时间格式
+            let time=this.moment(this.$store.state.dayendtime).format('Y-MM-DD')+ ' ' + this.q
+
+            //console.log(time)
+            //把拼接的时间改为时间戳
+            let hoemTime=this.moment(time).unix()
+            //console.log(hoemTime)
+            this.$store.commit('times',hoemTime)
+            this.$router.push('/information')
         }
+    },
+    mounted(){
+        //console.log(this.$store.state.doctorid)
+        this.axios.get('/search/doctor',{params:{doctorid:`${this.$store.state.doctorid}`}}).then(res=>{
+            this.homeInfo=res.data.result;
+            //console.log(this.homeInfo)
+        })
+        this.axios.get('/search/time',({params:{doctorid:`${this.$store.state.doctorid}`}},{params:{daystarttime:`${this.$store.state.daystarttime}`}},{params:{dayendtime:`${this.$store.state.dayendtime}`}})).then(res=>{
+            console.log(res)
+            let year=this.moment(this.$store.state.dayendtime).format('Y-MM-DD')
+            //console.log(year)
+            //console.log(res.data.result,year)
+            this.add=res.data.result
+            for(let i in this.am){
+                let a=year + " " + this.am[i].hour
+                let b=this.moment(a).unix()
+                console.log(b)
+                if(b==res.data.result[0]){
+                    this.isdisabled=false;
+                }
+            }
+        })
     }
 }
 </script>

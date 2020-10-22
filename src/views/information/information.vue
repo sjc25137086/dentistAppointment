@@ -2,7 +2,7 @@
     <div id="page">
         <div>
             <mt-header title="就诊人信息">
-                <router-link to="/" slot="left">
+                <router-link to="/homepage" slot="left">
                     <mt-button icon="back"></mt-button>
                 </router-link>
             </mt-header>
@@ -10,7 +10,7 @@
         <div id="banner"></div>
         <div>
             <mt-field type="text" label="姓名" placeholder="请输入您的姓名" :attr="{maxlength:10}" v-model="fname" @blur.native.capture="checkFname" :state="fnameState"></mt-field>
-            <mt-field type="date" label="年龄" placeholder="Input birthday" @blur.native.capture="checkFage" v-model="fage"></mt-field>
+            <mt-field type="number" label="年龄" placeholder="请输入您的年龄" :attr="{maxlength:3}" v-model="fage" @blur.native.capture="checkFage" :state="fageState"></mt-field>
             <div id="sex">
                 <p>性别</p>
                 <div>
@@ -51,7 +51,7 @@
         /* border-top: 1px solid #ccc; */
     }
     #sex div{
-        width: 250px;height: 27px;
+        width: 71%;height: 27px;
     }
     #sex div>label:last-child{
         margin-left: 10px;
@@ -67,11 +67,8 @@ export default {
             fname:'',//姓名
             fnameState:'',//姓名状态
             fage:'',//年龄
+            fageState:'',//年龄状态
             checkedValue:'',
-            // list:[
-            //     {value:1},
-            //     {value:0}
-            // ],
             sex:'',
             isCard:'',//身份证号码
             isCardState:'',//身份证状态
@@ -94,21 +91,18 @@ export default {
         },
         //年龄
         checkFage(){
-            let age=this.fage.split(/-/g)[0];
-            let year=new Date().getFullYear();
-            let fage=parseInt(year-age);
-            if(fage<0){
-                this.$toast('生日填写不正确');
-                return false;
-            }
-            if(fage>=0){
-                return true;
-            }
+            let fageRegExp=/^[0-9]{1,3}$/;
+                if(fageRegExp.test(this.fage)){
+                    this.fageState="success";
+                }else{
+                    this.$toast('年龄填写不正确')
+                    this.fageState="error";
+                }
         },
         //性别
         checkFsex(){
             let sex=document.querySelectorAll('.userSex input')
-            console.log(sex)
+            //console.log(sex)
             if(this.checkedValue==1){
                 sex[0].checked=true;
             }
@@ -142,8 +136,10 @@ export default {
             return false;
         },
         determine(){
-            if(this.checkFname() && this.checkFage() && this.checkIsCard() && this.checkPhone()){
-                this.axios.post('/user/forward',`doctorid=1&fname=${this.fname}&fage=${this.fage}&fsex=${this.checkedValue}&idCard=${this.isCard}&phone=${this.inPhone}&userid=1&time=160346895214`).then(res=>{
+            let time=this.$store.state.time
+            console.log(time)
+            if(this.checkFname() && this.checkIsCard() && this.checkPhone()){
+                this.axios.post('/user/forward',`doctorid=${this.$store.state.doctorid}&fname=${this.fname}&fage=${this.fage}&fsex=${this.checkedValue}&idCard=${this.isCard}&phone=${this.inPhone}&userid=${this.$store.state.userid}&time=${time}`).then(res=>{
                     if(res.data.code==200){
                         this.$messagebox("预约信息","恭喜，预约成功")
                         this.$router.push('/Yuyue');
