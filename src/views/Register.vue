@@ -18,7 +18,7 @@
       <!-- 确认密码输入框  -->
       <mt-field type="password" label="确认密码" placeholder="请再次输入密码" :attr="{maxlength:20,autocomplete:'off'}" v-model="conpassword" @blur.native.capture="getConPassword" :state="nameStatus3"></mt-field>
       <!-- 验证码输入 -->
-      <mt-field type="text" label="验证码" placeholder="请输入验证码">
+      <mt-field type="text" label="验证码" v-model="sms" placeholder="请输入验证码">
          <button :disabled="enabled" @click="getCode" v-html="text"></button>
       </mt-field>
       <!-- 注册按钮 -->
@@ -49,6 +49,7 @@ export default {
       text:"获取验证码",
       phone:"",
       password:"",
+      sms:"",
       conpassword:"",
       nameStatus:"",
       nameStatus2:"",
@@ -127,10 +128,25 @@ export default {
         return false;
       }
    },
+   getMsm(){
+     if(this.sms.length!=6){
+       this.$toast({
+         message:'请输入6位验证码',
+         position:'middle',
+         duration:'2000'
+       });
+       return false;
+     }else{
+       return true;
+     }
+   }
+   ,
+
     handle(){
-      if(this.getPhone() && this.getPassword() && this.getConPassword()){
+      if(this.getPhone() && this.getPassword() && this.getConPassword() && this.getMsm()){
         //将获取到的信息提交到web服务器
-        this.axios.post("/user/register",`phone=${this.phone}&password=${this.password}`).then(res=>{
+        this.axios.post("/user/register",`phone=${this.phone}&password=${this.password}&sms=${this.sms}`).then(res=>{
+          console.log(res);
           if(res.data.code==200){
               this.$toast({
                 message:"注册成功！",
@@ -144,6 +160,9 @@ export default {
               this.$store.commit("login",res.data.result[0]);
           }else if(res.data.code==601){
             this.$messagebox("注册提示","手机号已被占用");
+            
+          }else if(res.data.code == 400){
+            this.$messagebox("注册提示","验证码错误");
           }
         });
       }

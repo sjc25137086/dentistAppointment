@@ -8,7 +8,7 @@ export default{
     yy_logined:localStorage.getItem("yy_logined")?localStorage.getItem("yy_logined"):0,
     username:localStorage.getItem("username")?localStorage.getItem("username"):"",
     phone:localStorage.getItem("phone")?localStorage.getItem("phone"):"",
-    id:localStorage.getItem("id")?localStorage.getItem("id"):""
+    userid:localStorage.getItem("id")?localStorage.getItem("id"):""
   },
   mutations: {
     login(state,payload){
@@ -18,7 +18,7 @@ export default{
       localStorage.setItem("username",payload.username);
       state.phone=payload.phone;
       localStorage.setItem("phone",payload.phone);
-      state.id=payload.id;
+      state.userid=payload.id;
       localStorage.setItem("id",payload.id);
     },
     logout(state){
@@ -28,7 +28,7 @@ export default{
       localStorage.removeItem('username');
       state.phone="";
       localStorage.removeItem('phone');
-      state.id="";
+      state.userid="";
       localStorage.removeItem('id');
     }
 

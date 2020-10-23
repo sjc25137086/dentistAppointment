@@ -13,7 +13,7 @@
       <!-- 确认密码输入框  -->
       <mt-field type="password" label="确认新密码" placeholder="请再次输入新密码" :attr="{maxlength:20,autocomplete:'off'}" v-model="conpassword" @blur.native.capture="getConPassword" :state="nameStatus3"></mt-field>
       <!-- 验证码输入 -->
-      <mt-field type="text" label="验证码" placeholder="请输入验证码">
+      <mt-field type="text" label="验证码" placeholder="请输入验证码" :arrt="{maxlength:6}" v-model="sms" @blur.native.capture="getsms" :state="nameStatus4">
          <button :disabled="enabled" @click="getCode" v-html="text"></button>
       </mt-field>
       <mt-button class="btn" @click="handle" plain>确认修改密码</mt-button>
@@ -41,9 +41,11 @@ export default {
       phone:"",
       password:"",
       conpassword:"",
+      sms:"",
       nameStatus:"",
       nameStatus2:"",
-      nameStatus3:""
+      nameStatus3:"",
+      nameStatus4:""
     }
   },
   methods:{
@@ -121,22 +123,38 @@ export default {
         return false;
       }
    },
+   getsms(){
+      if(this.sms.length!=6){
+       this.$toast({
+         message:'请输入6位验证码',
+         position:'middle',
+         duration:'2000'
+       });
+       return false;
+     }else{
+       return true;
+     }
+   },
    handle(){
-    //  if(this.getPhone() && this.getPassword() && this.getConPassword()){
-    //     //将获取到的信息提交到web服务器
-    //     this.axios.post("/user/register",`phone=${this.phone}&password=${this.password}`).then(res=>{
-    //       if(res.data.code==200){
-    //           this.$toast({
-    //             message:"密码修改成功！",
-    //             position:"middle",
-    //             duration:"1000"
-    //           });
-    //           setTimeout(()=>{
-    //             this.$router.push("/login"); 
-    //           },1000);  
-    //       }
-    //      });
-    //     }
+     if(this.getPhone() && this.getPassword() && this.getConPassword() && this.getsms()){
+        //将获取到的信息提交到web服务器
+        this.axios.post("/user/password",`phone=${this.phone}&password=${this.password}&sms=${this.sms}`).then(res=>{
+          if(res.data.code==200){
+              this.$toast({
+                message:"密码修改成功！",
+                position:"middle",
+                duration:"1000"
+              });
+              setTimeout(()=>{
+                this.$router.push("/login"); 
+              },1000);  
+          }else if(res.data.code==601){
+               this.$messagebox("提示","手机号未注册");
+          }else if(res.data.code==400){
+               this.$messagebox("提示","验证码输入错误");
+          } 
+         });
+        }
       }
   }
 }

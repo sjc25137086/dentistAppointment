@@ -109,6 +109,11 @@ export default {
         });
       }
     }
+  },
+  mounted(){
+     if(localStorage.getItem("id")!=""){
+        this.$router.push("/"); 
+     }
   }
 }
 </script>
