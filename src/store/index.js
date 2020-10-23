@@ -7,8 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     doctorid:1,
-    daystarttime:1602757134368,
-    dayendtime:1602757634368,
+    daystarttime:1602710000000,
+    dayendtime:1602730000000,
     time:'',
     userid:2
   },

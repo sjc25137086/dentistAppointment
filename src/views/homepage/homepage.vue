@@ -33,8 +33,8 @@
                 <div id="gua">
                     <p>{{this.moment(this.$store.state.dayendtime).format('Y年MM月DD日')}} 星期{{this.moment(this.$store.state.dayendtime).format('e')}}</p>
                 </div>
-                <mt-cell v-for="(a,i) of am" :key="i" :title="a.hour">
-                    <mt-button type="primary" size="small" @click="yuyue(a.hour)" :disabled="isdisabled">预约</mt-button>
+                <mt-cell v-for="(elem,i) of timeList" :key="i" :title="elem.hour">
+                    <mt-button type="primary" size="small" @click="yuyue(elem.hour)" :disabled="!elem.hastime">预约</mt-button>
                 </mt-cell>
             </mt-tab-container-item>
             <mt-tab-container-item id="2">
@@ -55,11 +55,10 @@
                     <p>医师：<span>{{homeInfo[0].dname}}</span></p>
                     <p>科室：<span>{{homeInfo[0].dposition}}</span></p>
                     <p>费用：<span>{{homeInfo[0].price}}</span></p>
-                    <p>时段：<span>{{this.moment(this.$store.state.dayendtime).format('Y年MM月DD日 星期e')+' '+this.q}}</span></p>
+                    <p>时段：<span>{{this.moment(this.$store.state.dayendtime).format('Y年MM月DD日 星期e')+' '+this.hour}}</span></p>
                 </div>
             </div>
-            <!-- <p>请点击下方加号添加就诊人</p>
-            <img src="" alt=""> -->
+ 
             <mt-button type="primary" size="large" @click="confirm">确认预约</mt-button>
         </mt-popup>
     </div>
@@ -177,82 +176,59 @@ export default {
                     
                 }
             ],
-            am:[
-                {hour:'8:00'},
-                {hour:'8:30'},
-                {hour:'9:00'},
-                {hour:'9:30'},
-                {hour:'10:00'},
-                {hour:'10:30'},
-                {hour:'11:00'},
-                {hour:'11:30'},
-                {hour:'12:00'},
-                {hour:'14:00'},
-                {hour:'14:30'},
-                {hour:'15:00'},
-                {hour:'15:30'},
-                {hour:'16:00'},
-                {hour:'16:30'},
-                {hour:'17:00'},
-                {hour:'17:30'},
-                {hour:'18:00'}
+            timeList:[
+                {hour:'08:00',hastime:true},
+                {hour:'08:30',hastime:true},
+                {hour:'09:00',hastime:true},
+                {hour:'09:30',hastime:true},
+                {hour:'10:00',hastime:true},
+                {hour:'10:30',hastime:true},
+                {hour:'11:00',hastime:true},
+                {hour:'11:30',hastime:true},
+                {hour:'12:00',hastime:true},
+                {hour:'14:00',hastime:true},
+                {hour:'14:30',hastime:true},
+                {hour:'15:00',hastime:true},
+                {hour:'15:30',hastime:true},
+                {hour:'16:00',hastime:true},
+                {hour:'16:30',hastime:true},
+                {hour:'17:00',hastime:true},
+                {hour:'17:30',hastime:true},
+                {hour:'18:00',hastime:true}
             ],
             isdisabled:false,
-            q:'',
+            hour:'',
             add:[]
         }
-    },
-    watch:{
-    //     myday(){
-    //         let myda=new Date();
-    //         let myd=myda.getDay()
-    //         this.myday=weekday[myd]
-    //     }
-        // confirm(value){}
     },
     methods:{
         yuyue(i){
             this.popupVisible=true;
-            this.q = i;
-            console.log(this.add)
-            this.add.forEach(item=>{
-                console.log(1111111)
-                if(item==null){
-                    this.isdisabled=false
-                }
-            })
-            //console.log(this.q)
+            this.hour = i;
         },
         confirm(){
-            //拼接时间格式
-            let time=this.moment(this.$store.state.dayendtime).format('Y-MM-DD')+ ' ' + this.q
-
-            //console.log(time)
-            //把拼接的时间改为时间戳
-            let hoemTime=this.moment(time).unix()
-            //console.log(hoemTime)
+            let time=this.moment(this.$store.state.dayendtime).format('Y-MM-DD')+ ' ' + this.hour+':00'
+            let hoemTime=this.moment(time).unix()*1000
             this.$store.commit('times',hoemTime)
+            
             this.$router.push('/information')
         }
     },
     mounted(){
-        //console.log(this.$store.state.doctorid)
-        this.axios.get('/search/doctor',{params:{doctorid:`${this.$store.state.doctorid}`}}).then(res=>{
+        this.axios.get('/search/doctor',{params:{'doctorid':`${this.$store.state.doctorid}`}}).then(res=>{
             this.homeInfo=res.data.result;
-            //console.log(this.homeInfo)
         })
-        this.axios.get('/search/time',({params:{doctorid:`${this.$store.state.doctorid}`}},{params:{daystarttime:`${this.$store.state.daystarttime}`}},{params:{dayendtime:`${this.$store.state.dayendtime}`}})).then(res=>{
-            console.log(res)
+        this.axios.get('/search/time',{params:{'doctorid':this.$store.state.doctorid,'daystarttime':this.$store.state.daystarttime,'dayendtime':this.$store.state.dayendtime}}).then(res=>{
             let year=this.moment(this.$store.state.dayendtime).format('Y-MM-DD')
-            //console.log(year)
-            //console.log(res.data.result,year)
             this.add=res.data.result
-            for(let i in this.am){
-                let a=year + " " + this.am[i].hour
-                let b=this.moment(a).unix()
-                console.log(b)
-                if(b==res.data.result[0]){
-                    this.isdisabled=false;
+            for(let i in this.timeList){
+                let a=year + " " + this.timeList[i].hour
+                let b=this.moment(a).unix()*1000
+                for(let y in res.data.result){
+                    console.log(b,res.data.result[y].time)
+                    if(b==res.data.result[y].time){
+                        this.timeList[y].hastime=false;
+                    }
                 }
             }
         })
