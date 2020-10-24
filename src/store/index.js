@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import doctor from './doctor.js'
 
 
+import sjc from './sjc'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -21,5 +22,7 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
+    doctor,
+    sjc
   }
 })

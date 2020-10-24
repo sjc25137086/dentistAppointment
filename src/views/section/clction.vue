@@ -2,39 +2,12 @@
   <div>
      <div >
       <mt-header title="科室列表" class="bgcinfo">
-        <router-link to="/" slot="left">
-          <mt-button icon="back">科室选择</mt-button>
+        <router-link to="/pageHome" slot="left">
+          <mt-button icon="back">选择医院</mt-button>
         </router-link>
       </mt-header>
     </div>
-    <div class="demo-input-suffix">
-      <el-input
-        placeholder="搜索科室、医生"
-        prefix-icon="el-icon-search"
-        v-model="input2">
-      </el-input>
-    </div>
-    <!-- <mt-search v-model="value" placeholder="搜索科室、医生" class="pinfo"></mt-search> -->
-    <div class="binfo">
-      <router-link to=""><span>口腔修复科</span></router-link>
-      <el-divider></el-divider>
-      <router-link to=""><span>美学工作室</span></router-link>
-      <el-divider></el-divider>
-      <router-link to=""><span>下颚关节科</span></router-link>
-      <el-divider></el-divider>
-      <router-link to=""><span>口腔预防科综合干预项目专用</span></router-link>
-      <el-divider></el-divider>
-      <router-link to=""><span>牙体牙髓科</span></router-link>
-      <el-divider></el-divider>
-      <router-link to=""><span>口腔外科</span></router-link>
-      <el-divider></el-divider>
-      <router-link to=""><span>舒适化诊室</span></router-link>
-      <el-divider></el-divider>
-      <router-link to=""><span>正畸科一</span></router-link>
-      <el-divider></el-divider>
-      <router-link to=""><span>正畸科二</span></router-link>
-      <el-divider></el-divider>
-  </div>
+    <mt-cell :title="elem.kname" v-for="(elem,i) in ksList" value='点击进入' :key="i" @click.native="toDoctor(elem.id)"></mt-cell>
   </div>
 </template>
 <style scope>
@@ -62,8 +35,23 @@ export default {
   data() {
     return {
       value:'',
-      input2:''
+      input2:'',
+      ksList:[]
     }
   },
+  methods:{
+    toDoctor(ksid){
+      console.log(this.$store.state.sjc.ksid)
+      this.$store.commit('setKsid',ksid);
+      this.$router.push('/doctor')
+}
+  },
+  mounted(){
+    console.log(this.$store.state.sjc.hospitalid);
+    this.axios.get('/search/ks?hospitalid='+this.$store.state.sjc.hospitalid).then(res=>{
+      this.ksList = res.data.result;
+      console.log(this.ksList)
+    })
+  }
 }
 </script>
