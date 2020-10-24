@@ -16,7 +16,13 @@ export default ({
     mutations: {
         doctorId(state, i) {
             state.doctorId = i;
-        }
+        },
+        daystarttime_method(state, i) {
+            state.daystarttime = i;
+        },
+        dayendtime_method(state, i) {
+            state.dayendtime = i;
+        },
     },
     //拉货的汽车
     actions: {},

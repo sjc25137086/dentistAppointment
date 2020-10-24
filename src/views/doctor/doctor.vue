@@ -8,9 +8,9 @@
     </mt-header>
     <!-- 中间内容 -->
     <div class="doctor_m">
-      <div class="doctor_m-s">
+      <div @click="test" class="doctor_m-s">
         <span>日期{{time}}</span>
-        <div>
+        <div class='doctor_m-s-a'>
         <a href="javascript:;" class="doctor_m_a">按时期预约</a>
         <a href="javascript:;" class="doctor_m_aa">按医生预约</a>
         </div>
@@ -29,30 +29,63 @@
       <div class="mt-tab-container">
       <mt-tab-container v-model="active">
         <mt-tab-container-item :id="i"  v-for="(time,i) of 14" :key="i">
-          <div class="doctor_article" v-for="(article,index) of info" :key = "index" @click="subt(article.id)">
+          <div  v-for="(article,index) of info" :key = "index" >
           <!-- 医生图片 -->
-          <div class="article_image" >
-            <img :src="info.img">
-          </div>
+          <div class="doctor_article" v-if='article.day != undefined && !article.day.includes(weekArr[week+delay])' @click="subt(article.id)">
+            <div class="article_image" >
+              <img :src="info.img">
+            </div>
           <!-- 旁边的div -->
-          <div class="doctor_div">
-            <div class="doctor_name">
-              <span>{{article.dname}}</span>
-              <div class="doctor_yh">
-                <mt-badge size="small" color="#26A2FF">¥：{{article.price}}</mt-badge>
+            <div class="doctor_div">
+              <!-- 姓名|价格 -->
+              <div class="doctor_name">
+                <span>{{article.dname}}</span>
+                <div class="doctor_yh">
+                  <mt-badge size="small" color="#26A2FF">¥：{{article.price}}</mt-badge>
+                </div>
+              </div>
+              <!-- 显示是否可预约 -->
+              <div class="see_me"  v-if='`${parseInt(article.stateos) == true}`'>可预约</div>
+              <div class="see_me" v-else>不可预约</div>
+              <!-- 显示年龄|职业 -->
+              <div>
+                <p>{{article.dage}}</p>
+                <p>{{article.dposition}}</p>
+              </div>
+              <!-- 显示简介 -->
+              <div class="doctor_jian">
+              {{article.description}}
               </div>
             </div>
-            <div class="see_me" v-if='`${parseInt(article.stateos) == true}`'>可预约</div>
-            <div class="see_me" v-else>不可预约</div>
-            <div>
-              <p>{{article.dage}}</p>
-              <p>{{article.dposition}}</p>
+          </div>
+          <div v-else class="doctor_article" style=''>
+            <div class="article_image" >
+              <img :src="info.img">
             </div>
-            <div class="doctor_jian">
-             {{article.description}}
+          <!-- 旁边的div -->
+            <div class="doctor_div">
+              <!-- 姓名|价格 -->
+              <div class="doctor_name">
+                <span>{{article.dname}}</span>
+                <div class="doctor_yh">
+                  <mt-badge size="small" color="#26A2FF">¥：{{article.price}}</mt-badge>
+                </div>
+              </div>
+              <!-- 显示是否可预约 -->
+              <div class="see_me"  >今日休息</div>
+              <!-- 显示年龄|职业 -->
+              <div>
+                <p>{{article.dage}}</p>
+                <p>{{article.dposition}}</p>
+              </div>
+              <!-- 显示简介 -->
+              <div class="doctor_jian">
+              {{article.description}}
+              </div>
             </div>
           </div>
-          </div>
+        </div>
+
         </mt-tab-container-item>
       </mt-tab-container>
       </div>
@@ -124,7 +157,7 @@ transition:transform 1s ease-in-out;
   margin-left: 5px;
   position: relative;
 }
-.doctor_m-s div {
+.doctor_m-s-a {
   position: absolute;
   right: 2%;
   top: -12%;
@@ -211,7 +244,7 @@ transition:transform 1s ease-in-out;
 .doctor_name {
   height: 20;
   color: #000;
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 700;
   margin-bottom: 10px;
   display: flex;
@@ -259,6 +292,9 @@ export default {
 
   },
   methods:{
+    test(){
+      console.log(this.info);
+    },
      click_delay(i) {
       this.delay = i;
       //获取时间格式
@@ -269,10 +305,11 @@ export default {
       let day2 = endTime.toLocaleDateString();
       //转换为时间戳
       let daystarttime = this.moment(day1).valueOf();
-      let dayendtime = this.moment(day2).valueOf()
-      this.$store.state.doctor.daystarttime = day1;
-      this.$store.state.doctor.dayendtime = day2;
-
+      let dayendtime = this.moment(day2).valueOf();
+      //把时间戳保存到vuex中
+      this.$store.commit('daystarttime_method',daystarttime);
+      this.$store.commit('dayendtime_method',dayendtime);
+      
       //console.log(day1,day2,startTime,endTime);
       //console.log(this.moment(day1).valueOf());
       //console.log(this.moment(day2).valueOf());
@@ -280,7 +317,45 @@ export default {
       //let Ms = new Date(date.setDate(date.getDate() + this.delay)).toLocaleDateString();
       //2020-8-22 2020-8-23
       //console.log(Ms)
-     },
+
+      this.axios.get('/search/doctors',{params:{ksid:`${this.$store.state.doctor.ksid}`}}).then(res => {
+      let doctors = res.data.result;
+      //设置默认图片
+      if(doctors.img == null) {
+        doctors.img = require('../../assets/avatar/doctors.jpg')
+      }
+      //使用forEach遍历数组
+      doctors.forEach(item => {
+        //发送请
+         this.axios.get('/search/time',{params:{doctorid:`${item.id}`,daystarttime:`${this.$store.state.doctor.daystarttime}`,dayendtime:`${this.$store.state.doctor.dayendtime}`}}).then(res => {
+          // 判断数组长度给出响应
+            if(res.data.result.length <= 16) {
+              item.stateos = true;
+            } else {
+              item.stateos = false;
+            }
+          });
+        //发送请求获得医生休息时间
+        this.axios.get('/search/day',{params:{doctorid:`${item.id}`}}).then(res => {
+          let doctor_day = res.data.result;
+
+          item.day = doctor_day[0].restday.split("");
+          for(let i in item.day){
+            item.day[i] = parseInt(item.day[i])
+            let weekArray = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+            item.day[i] = weekArray[i]
+          }
+         })
+       })
+
+       setTimeout(()=>{this.info = doctors;
+      console.log(this.info[0].stateos,this.info[0].id)},100)
+      })
+
+      
+    }
+    ,
+    // 显示时间
     currentTime() {
       //获取系统时间
       let date = new Date();
@@ -298,6 +373,7 @@ export default {
       }
       this.time = `${year}-${month}-${day}`;
     },
+    //获取参数，实现跳转
     subt(i) {
       //this.$store.state.doctorId = i;
       this.$store.commit('doctorId',i);
@@ -308,25 +384,41 @@ export default {
     //在页面重载的时候调用方法currentTime
     this.currentTime();
     //发送请求接受一个科室下所有医生信息
-    this.axios.get('/search/doctors',{params:{ksid:`${this.$store.state.doctor.ksid}`}}).then(res => {
-      let doctors = res.data.result;
-      //设置默认图片
-      if(doctors.img == null) {
-        doctors.img = require('../../assets/avatar/doctors.jpg')
-      }
-      
-      doctors.forEach(item => {
-         this.axios.get('/search/time',{params:{doctorid:`${item.id}`,daystarttime:`${this.$store.state.doctor.daystarttime}`,dayendtime:`${this.$store.state.doctor.dayendtime}`}}).then(res => {
-            //this.info.doctorid = 
-            if(res.data.result.length <= 16) {
-              item.stateos = true;
-            } else {
-              item.stateos = false;
-            }
-          })
-      })
-      this.info = doctors;
-    })
+    //this.axios.get('/search/doctors',{params:{ksid:`${this.$store.state.doctor.ksid}`}}).then(res => {
+    //  let doctors = res.data.result;
+    //  //设置默认图片
+    //  if(doctors.img == null) {
+    //    doctors.img = require('../../assets/avatar/doctors.jpg')
+    //  }
+    //  //使用forEach遍历数组
+    //  doctors.forEach(item => {
+    //    //发送请求
+    //     this.axios.get('/search/time',{params:{doctorid:`${item.id}`,daystarttime:`${this.$store.state.doctor.daystarttime}`,dayendtime:`${this.$store.state.doctor.dayendtime}`}}).then(res => {
+    //      // 判断数组长度给出响应
+    //        if(res.data.result.length <= 16) {
+    //          item.stateos = true;
+    //        } else {
+    //          item.stateos = false;
+    //        }
+    //      });
+    //    //发送请求获得医生休息时间
+    //    this.axios.get('/search/day',{params:{doctorid:`${item.id}`}}).then(res => {
+    //      let doctor_day = res.data.result;
+
+    //      item.day = doctor_day[0].restday.split("");
+    //      for(let i in item.day){
+    //        item.day[i] = parseInt(item.day[i])
+    //        let weekArray = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+    //        item.day[i] = weekArray[i]
+    //      }
+    //      //console.log(item.day.includes(this.weekArr[this.week+this.delay]))
+
+    //     })
+    //   })
+    //  this.info = doctors;
+    //  //console.log(this.info)
+    //})
+    //调用
     this.click_delay(0);
   }
 }
