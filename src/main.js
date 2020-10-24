@@ -11,6 +11,7 @@ import 'mint-ui/lib/style.min.css';
 import { Popup } from 'mint-ui';
 Vue.component(Popup.name, Popup)
 Vue.use(Mint);
+axios.defaults.baseURL = 'http://127.0.0.1:3000'
 Vue.prototype.moment = moment;
 Vue.prototype.qs = qs;
 

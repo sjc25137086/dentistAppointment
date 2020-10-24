@@ -5,6 +5,7 @@ import doctor from './doctor.js'
 
 import sjc from './sjc'
 import vuexhui from "./vuex_hui.js"
+import guanli from './guanli'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -25,6 +26,7 @@ export default new Vuex.Store({
   modules: {
     doctor,
     sjc,
-    vuexhui
+    vuexhui,
+    guanli
   }
 })
