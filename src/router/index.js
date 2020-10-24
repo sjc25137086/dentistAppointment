@@ -26,25 +26,23 @@ const routes = [
       component: ()=>import('../components/HelloWorld.vue')
       },{
         path:'message',
-        name: 'Message',
+        name: 'message',
         component: ()=>import('../views/message/Message.vue')
       },
       {
-        path:'yuyue',
-        name: 'Yuyue',
-        component: ()=>import('../views/message/Yuyue.vue')
+        path:'undetail',
+        name: 'Undetail',
+        component: ()=>import('../views/message/Undetail.vue')
       },
-      
       {
         path:'oldyuyue',
         name: 'Oldyuyue',
         component: ()=>import('../views/old/Oldyuyue.vue')
       },
-    
       {
-        path:'undetail',
-        name: 'Undetail',
-        component: ()=>import('../views/undetail/Undetail.vue')
+        path:'yuyue',
+        name: 'Yuyue',
+        component: ()=>import('../views/Yuyue/Yuyue.vue')
       },
       {
           path: 'doctor',
