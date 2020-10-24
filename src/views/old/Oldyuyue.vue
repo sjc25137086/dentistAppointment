@@ -17,13 +17,9 @@
 
      <div v-for="(value,key) of yuyue" :key="key" @click='showDetail(value.id)'>
           <mt-cell :title="value.fname" to="message">
-         <span>{{time}}</span>
+         <!-- <span>{{time}}</span> -->
          </mt-cell> 
-         
        </div> 
-         
-       
-      
       </div>
      
 </template>
@@ -54,32 +50,19 @@ export default {
         })
       } ,
       showDetail(forwardid){//vuex中参数
-      this.$store.commit('setforwardid',forwardid);
-       
-        console.log(this.$store.state.guanli.forwardid);
-     
+        this.$store.commit('setforwardid',forwardid);     
       }
 
     },
     
       mounted(){
-       
-      
-        //2.向WEB服务器发送请求
-        this.axios.get('/user/overforward?uid=1').then(res=>{
-             this.yuyue = res.data.result
-             console.log(res.data.result)
-             let x = new Date(res.data.result[0].time).toLocaleDateString();
-          let y = new Date(res.data.result[0].time).toLocaleTimeString();
-             this.time=x+y
-          let a = new Date(res.data.result[1].time).toLocaleDateString();
-          let b=new Date(res.data.result[1].time).toLocaleTimeString();
-             this.time=a+b
         
-          let c = new Date(res.data.result[1].time).toLocaleDateString();
-          let d=new Date(res.data.result[1].time).toLocaleTimeString();
-             this.time=c+d
-          
+        if(this.$store.state.vuexhui.userid==""){
+          this.$router.push('/login')
+        }
+        //2.向WEB服务器发送请求
+        this.axios.get('/user/overforward?uid='+this.$store.state.vuexhui.userid).then(res=>{
+             this.yuyue = res.data.result
         });
     }
 }

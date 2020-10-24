@@ -51,7 +51,7 @@ export default {
   },
   methods:{
     goback(){
-      this.$router.go(-1);
+      this.$router.push("/"); 
     },
     getPhone(){
       //校验用户名
@@ -77,7 +77,6 @@ export default {
         return true;
      }else{
         this.nameStatus2="error";
-        //console.log("用户名非法");
         //简洁的短消息提示框
         this.$toast({
           message:"密码为必填项",
@@ -101,7 +100,8 @@ export default {
                 duration:"1000"
               });
               setTimeout(()=>{
-                this.$router.push("/"); 
+                this.$router.go(-1);
+                
               },1000);  
            }else{
             this.$messagebox("登录提示","用户名或密码错误");

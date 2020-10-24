@@ -20,13 +20,13 @@
          <span>{{time}}</span>
          </mt-cell> 
             <mt-cell title="预约状态" to="oldyuyue">
-         <span>{{this.$store.state.state ===0? '已取消' : '已完成'}}</span>
+         <span>{{state ===0? '已取消' : '已完成'}}</span>
          </mt-cell> 
          <mt-cell title="年龄" to="oldyuyue">
          <span>{{fage}}</span>
          </mt-cell> 
          <mt-cell title="性别" to="oldyuyue">
-         <span>{{this.$store.state.fsex ===1 ? '男' : '女'}}</span>
+         <span>{{fsex ===1 ? '男' : '女'}}</span>
          </mt-cell> 
             <mt-cell title="医生编号" to="oldyuyue">
          <span>{{doctorid}}</span>
@@ -84,14 +84,14 @@ export default {
       
         //2.向WEB服务器发送请求
         this.axios.get('/user/forwardmsg?forwardid='+this.$store.state.guanli.forwardid).then(res=>{
-              this.fname = res.data.result[0].fname;
-              let a = new Date(res.data.result[0].time).toLocaleDateString();
-             let b=new Date(res.data.result[0].time).toLocaleTimeString();
-               this.time=a+b
-              this.$store.state.state= res.data.result[0].state;
-              this.doctorid= res.data.result[0].doctorid;
-              this.fage= res.data.result[0].fage;
-            this.$store.state.fsex= res.data.result[0].fsex;
+          this.fname = res.data.result[0].fname;
+          let a = new Date(res.data.result[0].time).toLocaleDateString();
+          let b=new Date(res.data.result[0].time).toLocaleTimeString();
+          this.time=a+b
+          this.state= res.data.result[0].state;
+          this.doctorid= res.data.result[0].doctorid;
+          this.fage= res.data.result[0].fage;
+          this.fsex= res.data.result[0].fsex;
         });
     }
 }

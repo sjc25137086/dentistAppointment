@@ -3,7 +3,7 @@
         <div style="position:fixed;left:0;right:0;top:0;z-index:50">
             <div>
                 <mt-header>
-                    <router-link to="/" slot="left">
+                    <router-link to="/doctor" slot="left">
                         <mt-button icon="back"><span>医生主页</span></mt-button>
                     </router-link>
                 </mt-header>
@@ -22,17 +22,16 @@
                 </div>
             </div>
             <p id="explain">{{homeInfo[0].intro}}</p>
-            <mt-navbar v-model="active">
-                <mt-tab-item id="1">挂号</mt-tab-item>
-                <mt-tab-item id="2">介绍</mt-tab-item>
+            <mt-navbar v-model="active" style="height:2.5rem">
+                <mt-tab-item id="1" > <p>  挂号</p></mt-tab-item>
+                <mt-tab-item id="2" ><p>介绍</p></mt-tab-item>
             </mt-navbar>
-            <div id="jian"></div>
         </div>
-        <mt-tab-container v-model="active" class="main">
+        <mt-tab-container v-model="active" class="main" >
             <mt-tab-container-item id="1">
                 <div id="gua">
-                    <p>{{this.moment(this.$store.state.dayendtime).format('Y年MM月DD日')}} 星期{{this.moment(this.$store.state.dayendtime).format('e')}}</p>
-                </div>
+                <p>{{this.moment(this.$store.state.doctor.daystarttime).format('Y年MM月DD日')}} 星期{{this.moment(this.$store.state.doctor.daystarttime).format('e')==0 ? 7:this.moment(this.$store.state.doctor.daystarttime).format('e')}}</p>
+            </div>
                 <mt-cell v-for="(elem,i) of timeList" :key="i" :title="elem.hour">
                     <mt-button type="primary" size="small" @click="yuyue(elem.hour)" :disabled="!elem.hastime">预约</mt-button>
                 </mt-cell>
@@ -55,7 +54,7 @@
                     <p>医师：<span>{{homeInfo[0].dname}}</span></p>
                     <p>科室：<span>{{homeInfo[0].dposition}}</span></p>
                     <p>费用：<span>{{homeInfo[0].price}}</span></p>
-                    <p>时段：<span>{{this.moment(this.$store.state.dayendtime).format('Y年MM月DD日 星期e')+' '+this.hour}}</span></p>
+                    <p>时段：<span>{{this.moment(this.$store.state.doctor.daystarttime).format('Y年MM月DD日 星期e')+' '+this.hour}}</span></p>
                 </div>
             </div>
  
@@ -108,7 +107,7 @@
         background-color: #eeeeee;
     }
     .main{
-        margin-top: 230px;
+        margin-top: 63%;
         margin-bottom: 55px;
     }
     .nei{
@@ -207,7 +206,7 @@ export default {
             this.hour = i;
         },
         confirm(){
-            let time=this.moment(this.$store.state.dayendtime).format('Y-MM-DD')+ ' ' + this.hour+':00'
+            let time=this.moment(this.$store.state.doctor.dayendtime).format('Y-MM-DD')+ ' ' + this.hour+':00'
             let hoemTime=this.moment(time).unix()*1000
             this.$store.commit('times',hoemTime)
             
@@ -215,17 +214,17 @@ export default {
         }
     },
     mounted(){
-        this.axios.get('/search/doctor',{params:{'doctorid':`${this.$store.state.doctorid}`}}).then(res=>{
+        this.axios.get('/search/doctor',{params:{'doctorid':`${this.$store.state.doctor.doctorid}`}}).then(res=>{
+           
             this.homeInfo=res.data.result;
         })
-        this.axios.get('/search/time',{params:{'doctorid':this.$store.state.doctorid,'daystarttime':this.$store.state.daystarttime,'dayendtime':this.$store.state.dayendtime}}).then(res=>{
-            let year=this.moment(this.$store.state.dayendtime).format('Y-MM-DD')
+        this.axios.get('/search/time',{params:{'doctorid':this.$store.state.doctor.doctorid,'daystarttime':this.$store.state.doctor.daystarttime,'dayendtime':this.$store.state.doctor.dayendtime}}).then(res=>{
+            let year=this.moment(this.$store.state.doctor.dayendtime).format('Y-MM-DD')
             this.add=res.data.result
             for(let i in this.timeList){
                 let a=year + " " + this.timeList[i].hour
                 let b=this.moment(a).unix()*1000
                 for(let y in res.data.result){
-                    console.log(b,res.data.result[y].time)
                     if(b==res.data.result[y].time){
                         this.timeList[y].hastime=false;
                     }

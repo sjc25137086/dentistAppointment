@@ -1,7 +1,7 @@
 export default ({
     //物品
     state: {
-        doctorId: 1,
+        doctorid: 1,
         ksid: 1,
         daystarttime: '',
         dayendtime: '',
@@ -14,7 +14,7 @@ export default ({
     },
     //搬运工
     mutations: {
-        doctorId(state, i) {
+        doctorid(state, i) {
             state.doctorId = i;
         },
         daystarttime_method(state, i) {

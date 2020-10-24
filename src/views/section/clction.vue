@@ -41,16 +41,13 @@ export default {
   },
   methods:{
     toDoctor(ksid){
-      console.log(this.$store.state.sjc.ksid)
       this.$store.commit('setKsid',ksid);
       this.$router.push('/doctor')
 }
   },
   mounted(){
-    console.log(this.$store.state.sjc.hospitalid);
     this.axios.get('/search/ks?hospitalid='+this.$store.state.sjc.hospitalid).then(res=>{
       this.ksList = res.data.result;
-      console.log(this.ksList)
     })
   }
 }

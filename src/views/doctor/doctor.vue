@@ -8,7 +8,7 @@
     </mt-header>
     <!-- 中间内容 -->
     <div class="doctor_m">
-      <div @click="test" class="doctor_m-s">
+      <div class="doctor_m-s">
         <span>日期{{time}}</span>
         <div class='doctor_m-s-a'>
         <a href="javascript:;" class="doctor_m_a">按时期预约</a>
@@ -121,7 +121,7 @@ transition:transform 1s ease-in-out;
 
 /* 改变被选中时tab栏切换的样式 */
 .mint-navbar .mint-tab-item.is-selected {
-  background:  #26a2ff;
+  background-color:#26a2ff;
   border: 0;
   margin-bottom: -3px;
 }
@@ -139,7 +139,6 @@ transition:transform 1s ease-in-out;
 }
 
 /* 整个中间的容器 */
-.mt-tab-container {}
 .doctor_m {
   width: 100%;
   position: absolute;
@@ -292,9 +291,6 @@ export default {
 
   },
   methods:{
-    test(){
-      console.log(this.info);
-    },
      click_delay(i) {
       this.delay = i;
       //获取时间格式
@@ -310,15 +306,9 @@ export default {
       this.$store.commit('daystarttime_method',daystarttime);
       this.$store.commit('dayendtime_method',dayendtime);
       
-      //console.log(day1,day2,startTime,endTime);
-      //console.log(this.moment(day1).valueOf());
-      //console.log(this.moment(day2).valueOf());
-      //let day = date.getDate(); // 日
-      //let Ms = new Date(date.setDate(date.getDate() + this.delay)).toLocaleDateString();
-      //2020-8-22 2020-8-23
-      //console.log(Ms)
 
-      this.axios.get('/search/doctors',{params:{ksid:`${this.$store.state.doctor.ksid}`}}).then(res => {
+
+      this.axios.get('/search/doctors',{params:{ksid:`${this.$store.state.sjc.ksid}`}}).then(res => {
       let doctors = res.data.result;
       //设置默认图片
       if(doctors.img == null) {
@@ -349,7 +339,7 @@ export default {
        })
 
        setTimeout(()=>{this.info = doctors;
-      console.log(this.info[0].stateos,this.info[0].id)},100)
+      },200)
       })
 
       
@@ -375,50 +365,14 @@ export default {
     },
     //获取参数，实现跳转
     subt(i) {
-      //this.$store.state.doctorId = i;
-      this.$store.commit('doctorId',i);
+      this.$store.commit('doctorid',i);
       this.$router.push('/homepage');
     }
   },
   mounted() {
     //在页面重载的时候调用方法currentTime
     this.currentTime();
-    //发送请求接受一个科室下所有医生信息
-    //this.axios.get('/search/doctors',{params:{ksid:`${this.$store.state.doctor.ksid}`}}).then(res => {
-    //  let doctors = res.data.result;
-    //  //设置默认图片
-    //  if(doctors.img == null) {
-    //    doctors.img = require('../../assets/avatar/doctors.jpg')
-    //  }
-    //  //使用forEach遍历数组
-    //  doctors.forEach(item => {
-    //    //发送请求
-    //     this.axios.get('/search/time',{params:{doctorid:`${item.id}`,daystarttime:`${this.$store.state.doctor.daystarttime}`,dayendtime:`${this.$store.state.doctor.dayendtime}`}}).then(res => {
-    //      // 判断数组长度给出响应
-    //        if(res.data.result.length <= 16) {
-    //          item.stateos = true;
-    //        } else {
-    //          item.stateos = false;
-    //        }
-    //      });
-    //    //发送请求获得医生休息时间
-    //    this.axios.get('/search/day',{params:{doctorid:`${item.id}`}}).then(res => {
-    //      let doctor_day = res.data.result;
-
-    //      item.day = doctor_day[0].restday.split("");
-    //      for(let i in item.day){
-    //        item.day[i] = parseInt(item.day[i])
-    //        let weekArray = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
-    //        item.day[i] = weekArray[i]
-    //      }
-    //      //console.log(item.day.includes(this.weekArr[this.week+this.delay]))
-
-    //     })
-    //   })
-    //  this.info = doctors;
-    //  //console.log(this.info)
-    //})
-    //调用
+   
     this.click_delay(0);
   }
 }

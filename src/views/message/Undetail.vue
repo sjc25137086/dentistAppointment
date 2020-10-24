@@ -95,14 +95,13 @@ export default {
         this.axios.get('/user/forwardmsg?forwardid='+this.$store.state.guanli.forwardid).then(res=>{
            
               this.createtime = res.data.result[0].createtime;
-               this.$store.state.fsex = res.data.result[0].fsex;
+              this.fsex = res.data.result[0].fsex;
               this.fname = res.data.result[0].fname;
               let x = new Date(res.data.result[0].time). toLocaleDateString();
               let y = new Date(res.data.result[0].time).toLocaleTimeString();
-                this.time=x+y
-             
-             this.$store.state.state= res.data.result[0].state;
-             this.fage= res.data.result[0].fage;
+              this.time=x+y
+              this.state= res.data.result[0].state;
+              this.fage= res.data.result[0].fage;
               this.doctorid= res.data.result[0].doctorid;
          
           

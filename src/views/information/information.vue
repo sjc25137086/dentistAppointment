@@ -95,7 +95,6 @@ export default {
         //性别
         checkFsex(){
             let sex=document.querySelectorAll('.userSex input')
-            //console.log(sex)
             if(this.checkedValue==1){
                 sex[0].checked=true;
             }
@@ -126,13 +125,12 @@ export default {
             return false;
         },
         determine(){
-            let time=this.$store.state.time
-            console.log(time)
+            let time=this.$store.state.liyu.time
             if(this.checkFname() && this.checkIsCard() && this.checkPhone()){
-                this.axios.post('/user/forward',`doctorid=${this.$store.state.doctorid}&fname=${this.fname}&fage=${this.fage}&fsex=${this.checkedValue}&idCard=${this.isCard}&phone=${this.inPhone}&userid=${this.$store.state.userid}&time=${time}`).then(res=>{
+                this.axios.post('/user/forward',`doctorid=${this.$store.state.doctor.doctorid}&fname=${this.fname}&fage=${this.fage}&fsex=${this.checkedValue}&idCard=${this.isCard}&phone=${this.inPhone}&userid=${this.$store.state.vuexhui.userid}&time=${time}`).then(res=>{
                     if(res.data.code==200){
                         this.$messagebox("预约信息","恭喜，预约成功")
-                        this.$router.push('/Yuyue');
+                        this.$router.push('/yuyue');
                     }else{
                         this.$messagebox("预约信息","抱歉，您填写的信息有误");
                     }
