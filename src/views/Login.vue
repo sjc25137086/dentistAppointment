@@ -111,7 +111,7 @@ export default {
     }
   },
   mounted(){
-     if(localStorage.getItem("id")!=""){
+     if(this.$store.state.vuexhui.userid!=""){
         this.$router.push("/"); 
      }
   }

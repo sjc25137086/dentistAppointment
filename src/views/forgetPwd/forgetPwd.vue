@@ -13,7 +13,7 @@
       <!-- 确认密码输入框  -->
       <mt-field type="password" label="确认新密码" placeholder="请再次输入新密码" :attr="{maxlength:20,autocomplete:'off'}" v-model="conpassword" @blur.native.capture="getConPassword" :state="nameStatus3"></mt-field>
       <!-- 验证码输入 -->
-      <mt-field type="text" label="验证码" placeholder="请输入验证码" :arrt="{maxlength:6}" v-model="sms" @blur.native.capture="getsms" :state="nameStatus4">
+      <mt-field type="text" label="验证码" placeholder="请输入验证码" :attr="{maxlength:6}" v-model="sms" @blur.native.capture="getsms">
          <button :disabled="enabled" @click="getCode" v-html="text"></button>
       </mt-field>
       <mt-button class="btn" @click="handle" plain>确认修改密码</mt-button>
@@ -45,7 +45,6 @@ export default {
       nameStatus:"",
       nameStatus2:"",
       nameStatus3:"",
-      nameStatus4:""
     }
   },
   methods:{
