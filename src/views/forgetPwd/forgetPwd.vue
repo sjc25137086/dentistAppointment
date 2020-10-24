@@ -1,43 +1,34 @@
 <template>
   <div>
-    <!-- 顶部开始 -->
-    <mt-header title="注册">
-      <router-link to="/" slot="left">
-      <mt-button icon="back"></mt-button>
-      </router-link>
-      <router-link to="/login" slot="right" class="shortcut">已有账号？请登录
-      </router-link>
+    <mt-header title="忘记密码">
+      <mt-button icon="back" @click='goback' slot="left"></mt-button>
     </mt-header>
     <!-- 顶部结束 -->
-    <!-- 注册表单开始 -->
-    <div class="field">
+    <div>
+      <div class="field">
       <!-- 手机号输入框 -->
       <mt-field type="text" label="手机号" placeholder="请输入手机号" :attr="{maxlength:11}" v-model="phone" @blur.native.capture="getPhone" :state="nameStatus"></mt-field>
       <!-- 密码输入框 -->
-      <mt-field type="password" label="密码" placeholder="请输入密码" :attr="{maxlength:20,autocomplete:'off'}" v-model="password" @blur.native.capture="getPassword" :state="nameStatus2"></mt-field>
+      <mt-field type="password" label="新密码" placeholder="请输入新密码" :attr="{maxlength:20,autocomplete:'off'}" v-model="password" @blur.native.capture="getPassword" :state="nameStatus2"></mt-field>
       <!-- 确认密码输入框  -->
-      <mt-field type="password" label="确认密码" placeholder="请再次输入密码" :attr="{maxlength:20,autocomplete:'off'}" v-model="conpassword" @blur.native.capture="getConPassword" :state="nameStatus3"></mt-field>
+      <mt-field type="password" label="确认新密码" placeholder="请再次输入新密码" :attr="{maxlength:20,autocomplete:'off'}" v-model="conpassword" @blur.native.capture="getConPassword" :state="nameStatus3"></mt-field>
       <!-- 验证码输入 -->
-      <mt-field type="text" label="验证码" v-model="sms" placeholder="请输入验证码">
+      <mt-field type="text" label="验证码" placeholder="请输入验证码" :attr="{maxlength:6}" v-model="sms" @blur.native.capture="getsms">
          <button :disabled="enabled" @click="getCode" v-html="text"></button>
       </mt-field>
-      <!-- 注册按钮 -->
-      <mt-button class="btn" @click="handle" plain>注册</mt-button>
+      <mt-button class="btn" @click="handle" plain>确认修改密码</mt-button>
     </div>
-    <!-- 注册表单结束 -->
+  </div>
   </div>
 </template>
 <style scoped>
-.shortcut{
-  text-decoration: none;
-}
 .field{
   margin-top: 100px;
-}
+} 
 .btn{
-  padding: 0 80px;
+  padding: 0 50px;
   left:50%;
-  margin-left: -98px;
+  margin-left: -104px;
   margin-top: 20px;
 }
 </style>
@@ -49,14 +40,17 @@ export default {
       text:"获取验证码",
       phone:"",
       password:"",
-      sms:"",
       conpassword:"",
+      sms:"",
       nameStatus:"",
       nameStatus2:"",
-      nameStatus3:""
+      nameStatus3:"",
     }
   },
   methods:{
+    goback(){
+       this.$router.go(-1);
+    },
     getCode(){
       let count=60;
    let timer=setInterval(()=>{
@@ -80,7 +74,7 @@ export default {
          }
       });
     },
-    getPhone(){
+     getPhone(){
       //校验手机号
       let phoneRegExp=/^1[3-9]\d{9}$/;
       if(phoneRegExp.test(this.phone)){
@@ -128,8 +122,8 @@ export default {
         return false;
       }
    },
-   getMsm(){
-     if(this.sms.length!=6){
+   getsms(){
+      if(this.sms.length!=6){
        this.$toast({
          message:'请输入6位验证码',
          position:'middle',
@@ -139,34 +133,28 @@ export default {
      }else{
        return true;
      }
-   }
-   ,
-
-    handle(){
-      if(this.getPhone() && this.getPassword() && this.getConPassword() && this.getMsm()){
+   },
+   handle(){
+     if(this.getPhone() && this.getPassword() && this.getConPassword() && this.getsms()){
         //将获取到的信息提交到web服务器
-        this.axios.post("/user/register",`phone=${this.phone}&password=${this.password}&sms=${this.sms}`).then(res=>{
-          console.log(res);
+        this.axios.post("/user/password",`phone=${this.phone}&password=${this.password}&sms=${this.sms}`).then(res=>{
           if(res.data.code==200){
               this.$toast({
-                message:"注册成功！",
+                message:"密码修改成功！",
                 position:"middle",
                 duration:"1000"
               });
               setTimeout(()=>{
-                this.$router.push("/"); 
+                this.$router.push("/login"); 
               },1000);  
-              //用户注册成功后自动登录
-              this.$store.commit("login",res.data.result[0]);
           }else if(res.data.code==601){
-            this.$messagebox("注册提示","手机号已被占用");
-            
-          }else if(res.data.code == 400){
-            this.$messagebox("注册提示","验证码错误");
-          }
-        });
+               this.$messagebox("提示","手机号未注册");
+          }else if(res.data.code==400){
+               this.$messagebox("提示","验证码输入错误");
+          } 
+         });
+        }
       }
-    }
   }
 }
 </script>

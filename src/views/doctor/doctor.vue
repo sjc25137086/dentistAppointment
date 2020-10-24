@@ -1,128 +1,272 @@
 <template>
   <div id="app">
     <!-- 顶部导航栏 -->
-    <mt-header>
+    <mt-header >
       <router-link to="/" slot="left">
         <mt-button icon="back">口腔外科</mt-button>
       </router-link>
-      <mt-button icon="more" slot="right"></mt-button>
     </mt-header>
     <!-- 中间内容 -->
     <div class="doctor_m">
       <div class="doctor_m-s">
         <span>日期{{time}}</span>
-        <a href="javasprice" class="doctor_m-a">按时期预约</a>
-        <a href="javasprice" class="doctor_m-a">按医生预约</a>
+        <div class='doctor_m-s-a'>
+        <a href="javascript:;" class="doctor_m_a">按时期预约</a>
+        <a href="javascript:;" class="doctor_m_aa">按医生预约</a>
+        </div>
       </div>
-      <!-- 底部分页 -->
-      <mt-navbar v-model="active">
-        <mt-tab-item id="tab-container1">
-          <p>{{week}}</p>
-          <p>{{day}}</p>
-          <p>无</p>
+      
+      <!-- 分页开始 -->
+      <mt-navbar v-model="active" class="mint-navbar">
+      <div class="tab_item1 tab_item1_1 tab_item_x">
+        <mt-tab-item :id="i" class="mint-tab-item" v-for="(time,i) of 14" :key="i"  @click.native="click_delay(i)">
+          <p>{{weekArr[week + i]}}</p> 
+          <p>{{day[i]}}</p>
         </mt-tab-item>
-        <mt-tab-item id="tab-container2">
-          <p>{{week}}</p>
-          <p>{{day}}</p>
-          <p>无</p>
-        </mt-tab-item>
-        <mt-tab-item id="tab-container3">
-          <p>{{week}}</p>
-          <p>{{day}}</p>
-          <p>无</p>
-        </mt-tab-item>
-        <mt-tab-item id="tab-container4">
-          <p>{{week}}</p>
-          <p>{{day}}</p>
-          <p>无</p>
-        </mt-tab-item>
-        <mt-tab-item id="tab-container5">
-          <p>{{week}}</p>
-          <p>{{day}}</p>
-          <p>无</p>
-        </mt-tab-item>
-        
+      </div>
       </mt-navbar>
+      <!-- 分页内容 -->
+      <div class="mt-tab-container">
       <mt-tab-container v-model="active">
-        <mt-tab-container-item id="tab-container1" >
-          <div class="article" v-for="(article,index) of stt" :key = "index">
+        <mt-tab-container-item :id="i"  v-for="(time,i) of 14" :key="i">
+          <div  v-for="(article,index) of info" :key = "index" >
           <!-- 医生图片 -->
-          <div class="article-image" >
-            <img :src='article.img'>
-          </div>
-          <div class="article-wrapper">
-            <div class="article-wrapper-name">
-              <span>{{article.name}}</span>
-              <span class="article-wrapper-name-p">
-              余号:{{article.yh}}
-              <mt-badge size="small">20￥</mt-badge>
-              </span>
+          <div class="doctor_article" v-if='article.day != undefined && !article.day.includes(weekArr[week+delay])' @click="subt(article.id)">
+            <div class="article_image" >
+              <img :src="info.img">
             </div>
-            <div  class="article-wrapper-zy">
-              {{article.zhiye}}
-            </div>
-            <div class="article-wrapper-js">
-              {{article.jianjie}}
+          <!-- 旁边的div -->
+            <div class="doctor_div">
+              <!-- 姓名|价格 -->
+              <div class="doctor_name">
+                <span>{{article.dname}}</span>
+                <div class="doctor_yh">
+                  <mt-badge size="small" color="#26A2FF">¥：{{article.price}}</mt-badge>
+                </div>
+              </div>
+              <!-- 显示是否可预约 -->
+              <div class="see_me"  v-if='`${parseInt(article.stateos) == true}`'>可预约</div>
+              <div class="see_me" v-else>不可预约</div>
+              <!-- 显示年龄|职业 -->
+              <div>
+                <p>{{article.dage}}</p>
+                <p>{{article.dposition}}</p>
+              </div>
+              <!-- 显示简介 -->
+              <div class="doctor_jian">
+              {{article.description}}
+              </div>
             </div>
           </div>
+          <div v-else class="doctor_article" style=''>
+            <div class="article_image" >
+              <img :src="info.img">
+            </div>
+          <!-- 旁边的div -->
+            <div class="doctor_div">
+              <!-- 姓名|价格 -->
+              <div class="doctor_name">
+                <span>{{article.dname}}</span>
+                <div class="doctor_yh">
+                  <mt-badge size="small" color="#26A2FF">¥：{{article.price}}</mt-badge>
+                </div>
+              </div>
+              <!-- 显示是否可预约 -->
+              <div class="see_me"  >今日休息</div>
+              <!-- 显示年龄|职业 -->
+              <div>
+                <p>{{article.dage}}</p>
+                <p>{{article.dposition}}</p>
+              </div>
+              <!-- 显示简介 -->
+              <div class="doctor_jian">
+              {{article.description}}
+              </div>
+            </div>
           </div>
+        </div>
+
         </mt-tab-container-item>
       </mt-tab-container>
+      </div>
     </div>
   </div>
 </template>
 
 <style>
-.doctor_m {
-  margin: 10px 5px;
-  font-size: 18px;
+/* 滑动效果 */
+.tab_item1 {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 200%;
+  display: flex;
+  justify-content: space-between;
 }
-.doctor_m-s {
-  margin-bottom: 20px;
-}
-.doctor_m-a {
-  height: 20px;
-  float: right;
-  text-decoration: none;
-  color: #000;
-  font-size: 15px;
-  margin-top: 2px;
+.tab_item1_1{
+transform:translateX(-100%);
+transition:transform 1s ease-in-out;
 }
 
-  /* 文章容器 */
-.article{
-	padding-bottom:10px;
-	border-bottom:1px solid #999;
-	margin:10px;
+.tab_item_x {
+  justify-content: space-between;
+  transform:translateX(0);
+  transition:transform 1s ease-in-out;
+}
+
+/* 改变被选中时tab栏切换的字体样式 */
+.mint-navbar .mint-tab-item.is-selected p{
+  color: #fff;
+}
+
+/* 改变被选中时tab栏切换的样式 */
+.mint-navbar .mint-tab-item.is-selected {
+  background-color:#26a2ff;
+  border: 0;
+  margin-bottom: -3px;
+}
+
+/* 改变头部样式 */
+.mint-header {
+  height: 60px;
+}
+
+.mint-navbar {
+  position: relative;
+  overflow-y: auto;
+  height: 70px;
+  border-bottom: 1px solid #26a2ff;
+}
+
+/* 整个中间的容器 */
+.doctor_m {
+  width: 100%;
+  position: absolute;
+  margin: 10px auto;
+  font-size: 18px;
+  color: #999;
+  margin-bottom: 50px;
+}
+
+/* 预约按钮设置 */
+.doctor_m-s {
+  width: 100%;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  margin-left: 5px;
+  position: relative;
+}
+.doctor_m-s-a {
+  position: absolute;
+  right: 2%;
+  top: -12%;
+}
+.doctor_m_a,
+.doctor_m_aa {
+  text-decoration: none;
+  padding: 5px;
+  border: 1px solid #26A2FF;
+}
+
+.doctor_m_a {
+  background-color: #26A2FF;
+  color: #fff;
+}
+
+.doctor_m_aa {
+  color: #26A2FF;
+}
+
+/* 分页头部设置 */
+.mint-navbar .mint-tab-item {
+  width: 5%;
+  float: left;
+  padding: 5px;
+  margin: 5px 3px;
+}
+
+.mint-navbar .mint-tab-item p {
+  font-size: 15px;
+  margin: 5px 0;
+  color: #999;
+}
+.mint-navbar .mint-tab-item p+p {
+  font-size: 12px;
+}
+
+/* 分页容器 */
+.doctor_article {
   display: flex;
+  margin: 8px 5px;
+  border-bottom: 1px solid #26a2ff;
 }
 
 /* 医生图容器 */
-.article-image{
+/* 图片样式 */
+.article_image{
   margin-right: 15px;
 }
-.article-image img{
+
+.article_image img{
   width:112px;
+  margin-top: 5px;
   border-radius: 5px;
 }
-.article-wrapper{
-	margin-top: 10px;
-  
-}
-.article-wrapper-name{
-	font-size: 20px;
-  font-weight: 700;
-}
-.article-wrapper-name-p {
-  margin-left: 125px;
-	font-size: 15px;
 
+/* 可预约样式 */
+.doctor_div {
+  position: relative;
 }
-.article-wrapper-zy{
-	margin-top: 15px;
+
+.see_me {
+  position: absolute;
+  right: 4%;
+  top: 20%;
+  color: #000;
 }
-.article-wrapper-js{
-	margin-top: 15px;
+
+.doctor_div,
+.doctor_name {
+  width: 100%;
+  margin: 5px auto;
+}
+
+.doctor_div div+div {
+  margin: 14px 0;
+}
+
+.doctor_div p {
+  margin-bottom: 5px;
+}
+
+
+.doctor_name {
+  height: 20;
+  color: #000;
+  font-size: 19px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+}
+
+.doctor_yh {
+  font-size: 18px;
+  margin-right: 10px;
+  position: absolute;
+  right: 0;
+}
+
+/* 设置文本 */
+.doctor_div {
+  overflow: hidden;
+}
+.doctor_jian {
+  height: 20px;
+  overflow: hidden;
+  /* 将溢出的文本变成省略号 */
+  text-overflow:ellipsis;
+  white-space: nowrap;
+  font-size: 15px;
 }
 </style>
 
@@ -132,56 +276,104 @@
 export default {
   data(){
     return {
-      active:'tab-container1',
+      active:0,
       week:'',
       time:'',
-      day:'',
-      stt:[
-        {
-        name:"jj",
-        zhiye:'主治医生',
-        jianjie:'asdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkas',
-        yh:'6',
-        img:require('../../assets/avatar/00c1d55af1178ca801206abad941b6.jpg')
-        },
-        {
-        name:"jj",
-        zhiye:'主治医生',
-        jianjie:'asdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkas',
-        yh:'6',
-
-         img:require('../../assets/avatar/00c1d55af1178ca801206abad941b6.jpg')
-        },
-        {
-        name:"jj",
-        zhiye:'主治医生',
-        jianjie:'asdj;asjdilkasldjdksa;jdklasjdlkjsalkdjalksdjlksjadlkjaslkdjlkasjdlkasjdlkas',
-        yh:'6',
-
-         img:require('../../assets/avatar/00c1d55af1178ca801206abad941b6.jpg')
-        },
-        ]
-      
+      day:[],
+      doctor_Array:[],
+      delay:0,
+      info:'',
+      docx:'',
+      weekArr : [ "周日", "周一", "周二", "周三", "周四", "周五", "周六" ,"周日", "周一", "周二", "周三", "周四", "周五", "周六","周日", "周一", "周二", "周三", "周四", "周五", "周六"],
     }
   },
+  watch:{
+
+  },
   methods:{
+     click_delay(i) {
+      this.delay = i;
+      //获取时间格式
+      let startTime = new Date(new Date().setDate(new Date().getDate() + this.delay));
+      let endTime = new Date(new Date().setDate(new Date().getDate() + this.delay + 1));
+      //转换为时间格式
+      let day1 = startTime.toLocaleDateString();    
+      let day2 = endTime.toLocaleDateString();
+      //转换为时间戳
+      let daystarttime = this.moment(day1).valueOf();
+      let dayendtime = this.moment(day2).valueOf();
+      //把时间戳保存到vuex中
+      this.$store.commit('daystarttime_method',daystarttime);
+      this.$store.commit('dayendtime_method',dayendtime);
+      
+
+
+      this.axios.get('/search/doctors',{params:{ksid:`${this.$store.state.sjc.ksid}`}}).then(res => {
+      let doctors = res.data.result;
+      //设置默认图片
+      if(doctors.img == null) {
+        doctors.img = require('../../assets/avatar/doctors.jpg')
+      }
+      //使用forEach遍历数组
+      doctors.forEach(item => {
+        //发送请
+         this.axios.get('/search/time',{params:{doctorid:`${item.id}`,daystarttime:`${this.$store.state.doctor.daystarttime}`,dayendtime:`${this.$store.state.doctor.dayendtime}`}}).then(res => {
+          // 判断数组长度给出响应
+            if(res.data.result.length <= 16) {
+              item.stateos = true;
+            } else {
+              item.stateos = false;
+            }
+          });
+        //发送请求获得医生休息时间
+        this.axios.get('/search/day',{params:{doctorid:`${item.id}`}}).then(res => {
+          let doctor_day = res.data.result;
+
+          item.day = doctor_day[0].restday.split("");
+          for(let i in item.day){
+            item.day[i] = parseInt(item.day[i])
+            let weekArray = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+            item.day[i] = weekArray[i]
+          }
+         })
+       })
+
+       setTimeout(()=>{this.info = doctors;
+      },200)
+      })
+
+      
+    }
+    ,
+    // 显示时间
     currentTime() {
+      //获取系统时间
       let date = new Date();
-       let year = date.getFullYear(); // 年
+      let year = date.getFullYear(); // 年
       let month = date.getMonth() + 1; // 月
-      let day = date.getDate(); // 日
       let week = date.getDay(); //星期
-      let weekArr = [ "周日", "周一", "周二", "周三", "周四", "周五", "周六" ];
-      this.week = weekArr[week];
+      let day = date.getDate(); // 日
+      this.week = week;
+      for(let n = 0;n < 15;n ++) {
+      date.setDate(date.getDate() +  n) ;
+      let m = (date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1); //获取当前月份的日期，不足10补0
+      let day_one = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+      this.day.push(`${m}-${day_one}`);
+      date.setDate(date.getDate() - n) ;
+      }
       this.time = `${year}-${month}-${day}`;
-      this.day = day;
+    },
+    //获取参数，实现跳转
+    subt(i) {
+      this.$store.commit('doctorid',i);
+      this.$router.push('/homepage');
     }
   },
   mounted() {
+    //在页面重载的时候调用方法currentTime
     this.currentTime();
-    this.axios.get('').then(res => {
-      
-    })
+   
+    this.click_delay(0);
   }
 }
 </script>
