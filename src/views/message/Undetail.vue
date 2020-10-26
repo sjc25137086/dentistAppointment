@@ -73,7 +73,8 @@ export default {
               state:"",
               doctorid:""  ,
               fsex:"",
-              fage: ""
+              fage: "",
+              timestmp:''
               
         };
     },
@@ -81,8 +82,13 @@ export default {
    btn(){
    
        MessageBox.confirm('确定取消?').then(action =>  {
-      this.axios.delete('/user/cancelforward?forwardid='+this.$store.state.guanli.forwardid).then(res=>{
-          
+      this.axios.delete('/user/cancelforward?forwardid='+this.$store.state.guanli.forwardid+'&doctorid='+this.doctorid+'&time='+this.timestamp).then(res=>{
+          this.$toast({
+            message:'取消成功'
+          })
+          setTimeout(()=>{
+            this.$router.push('/oldyuyue')
+          })
            });
        })
        }
@@ -97,6 +103,7 @@ export default {
               this.createtime = res.data.result[0].createtime;
               this.fsex = res.data.result[0].fsex;
               this.fname = res.data.result[0].fname;
+              this.timestamp = res.data.result[0].time;
               let x = new Date(res.data.result[0].time). toLocaleDateString();
               let y = new Date(res.data.result[0].time).toLocaleTimeString();
               this.time=x+y

@@ -16,8 +16,7 @@
       
      <div v-for="(value,key) of yuyue" :key="key" @click='showDetail(value.id)'>
           <mt-cell :title="value.fname" to="undetail">
-        <!-- <span>{{time}}</span> -->
-         </mt-cell> 
+      </mt-cell> 
          
        </div> 
          
@@ -90,8 +89,10 @@ export default {
         }
          //2.向WEB服务器发送请求
         this.axios.get('/user/doingforward?uid='+this.$store.state.vuexhui.userid).then(res=>{
+          if(res.data.result.length>0){
           this.yuyue = res.data.result
           this.forwardid = res.data.result[0].id; //输出6
+          }
         });
     }
 }

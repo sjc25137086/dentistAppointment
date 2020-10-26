@@ -16,8 +16,7 @@
 
 
      <div v-for="(value,key) of yuyue" :key="key" @click='showDetail(value.id)'>
-          <mt-cell :title="value.fname" to="message">
-         <!-- <span>{{time}}</span> -->
+          <mt-cell :title="value.fname" :value="value.state==0 ? '已取消':'已完成'" to="message">
          </mt-cell> 
        </div> 
       </div>

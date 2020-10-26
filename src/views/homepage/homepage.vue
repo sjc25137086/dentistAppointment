@@ -206,10 +206,9 @@ export default {
         },
         confirm(){
             if(this.$store.state.vuexhui.userid){
-            let time=this.moment(this.$store.state.doctor.dayendtime).format('Y-MM-DD')+ ' ' + this.hour+':00'
+            let time=this.moment(this.$store.state.doctor.daystarttime).format('Y-MM-DD')+ ' ' + this.hour+':00'
             let hoemTime=this.moment(time).unix()*1000
             this.$store.commit('times',hoemTime)
-            
             this.$router.push('/information')
             }else{
                 this.$toast({
@@ -225,7 +224,7 @@ export default {
             this.homeInfo=res.data.result;
         })
         this.axios.get('/search/time',{params:{'doctorid':this.$store.state.doctor.doctorid,'daystarttime':this.$store.state.doctor.daystarttime,'dayendtime':this.$store.state.doctor.dayendtime}}).then(res=>{
-            let year=this.moment(this.$store.state.doctor.dayendtime).format('Y-MM-DD')
+            let year=this.moment(this.$store.state.doctor.daystarttime).format('Y-MM-DD')
             this.add=res.data.result
             for(let i in this.timeList){
                 let a=year + " " + this.timeList[i].hour

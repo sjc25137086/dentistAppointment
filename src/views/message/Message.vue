@@ -20,7 +20,7 @@
          <span>{{time}}</span>
          </mt-cell> 
             <mt-cell title="预约状态" to="oldyuyue">
-         <span>{{state ===0? '已取消' : '已完成'}}</span>
+         <span>{{state ==0? '已取消' : '已完成'}}</span>
          </mt-cell> 
          <mt-cell title="年龄" to="oldyuyue">
          <span>{{fage}}</span>
@@ -89,6 +89,7 @@ export default {
           let b=new Date(res.data.result[0].time).toLocaleTimeString();
           this.time=a+b
           this.state= res.data.result[0].state;
+          console.log(res.data.result)
           this.doctorid= res.data.result[0].doctorid;
           this.fage= res.data.result[0].fage;
           this.fsex= res.data.result[0].fsex;
