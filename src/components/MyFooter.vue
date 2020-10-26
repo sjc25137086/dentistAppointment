@@ -33,3 +33,12 @@ export default {
   }
 }
 </script>
+<style>
+  a .mint-tab-item-label{
+    color:#222;
+  }
+
+  .is-selected .mint-tab-item-label{
+    color:#26a2ff
+  }
+</style>

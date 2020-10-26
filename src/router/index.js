@@ -69,7 +69,7 @@ const routes = [
         component:()=>import('../views/homepage/homepage.vue')
       },
       {
-        path:'pagehome',
+        path:'',
         component:()=>import('../views/section/pagehome.vue')
       },
       {

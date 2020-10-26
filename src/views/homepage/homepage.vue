@@ -68,7 +68,6 @@
         display: flex;
         justify-content: space-around;
         padding-top: 20px;
-        /* padding-bottom: 10px; */
     }
     #jie{
         display: flex;
@@ -206,11 +205,18 @@ export default {
             this.hour = i;
         },
         confirm(){
+            if(this.$store.state.vuexhui.userid){
             let time=this.moment(this.$store.state.doctor.dayendtime).format('Y-MM-DD')+ ' ' + this.hour+':00'
             let hoemTime=this.moment(time).unix()*1000
             this.$store.commit('times',hoemTime)
             
             this.$router.push('/information')
+            }else{
+                this.$toast({
+                    message: '请登录'
+                });
+                setTimeout(()=>{this.$router.push('/login')},2000)
+            }
         }
     },
     mounted(){

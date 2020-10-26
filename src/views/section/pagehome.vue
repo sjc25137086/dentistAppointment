@@ -2,11 +2,13 @@
   <div>
     <div>
       <mt-header title="牙医预约">
-        <router-link to="/" slot="left">
-          <mt-button icon="back"></mt-button>
-        </router-link>
-        <router-link to="/login" slot="right" class="shortcut" >登录</router-link>
-        
+        <div slot="right" class="shortcut" v-if="this.$store.state.vuexhui.yy_logined==0">
+        <router-link to="/register">注册 </router-link>
+        <router-link to="/login">登录</router-link>
+      </div>
+      <div slot="right" class="shortcut" v-else>
+         <mt-button type="primary" @click="logout">注销</mt-button>
+       </div>
       </mt-header>
     </div>
     <div class="mt_search">
@@ -93,6 +95,9 @@ export default {
         }
       }
     },
+    logout(){
+      this.$store.commit('logout');
+    },
     showAreaSelect(){
       this.areaVisible =true;
       this.flag = true;
@@ -144,6 +149,10 @@ export default {
 };
 </script>
 <style scope>
+a{
+  text-decoration: none;
+  color:#fff;
+}
 .hospital_info{
   border-bottom: 1px solid #26a2ff;
   height: 98%;

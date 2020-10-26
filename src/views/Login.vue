@@ -91,6 +91,7 @@ export default {
         //将获取到的信息提交到web服务器
         this.axios.get(`/user/login?phone=${this.phone}&password=${this.password}`).then(res=>{
            if(res.data.code==200){
+             console.log(res);
              //用户登录成功
              //提交mutations
              this.$store.commit("login",res.data.result[0]);
@@ -101,7 +102,6 @@ export default {
               });
               setTimeout(()=>{
                 this.$router.go(-1);
-                
               },1000);  
            }else{
             this.$messagebox("登录提示","用户名或密码错误");

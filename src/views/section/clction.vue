@@ -2,7 +2,7 @@
   <div>
      <div >
       <mt-header title="科室列表" class="bgcinfo">
-        <router-link to="/pageHome" slot="left">
+        <router-link to="/" slot="left">
           <mt-button icon="back">选择医院</mt-button>
         </router-link>
       </mt-header>
